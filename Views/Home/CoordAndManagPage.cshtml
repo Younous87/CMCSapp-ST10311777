@@ -1,52 +1,62 @@
 ﻿@{
-	ViewData["Title"] = "Approve Claim";
+    ViewData["Title"] = "Approve Claim"; // Sets the page title to "Approve Claim"
 }
 
+<!-- Header Section -->
 <header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
-	<h1 class="w3-jumbo w3-text-red"><b>Approve Claim</b></h1>
+    <!-- Main Heading for the page -->
+    <h1 class="w3-jumbo w3-text-red"><b>Approve Claim</b></h1>
 
-	<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
-	<div class="w3-row-padding w3-padding-64 w3-container">
-		<div class="w3-content">
-			<div class="w3-center">
+    <!-- Centered red horizontal bar with rounded corners, used as a separator -->
+    <div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
 
-				<table class="table">
-					<thead>
-					<tr>
-						<th>Claim ID </th> 
-						<th>Date </th> 
-						<th>Hours Worked </th> 
-						<th>Hourly Rate</th> 
-						<th>Status</th>
-					</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td>001 </td> 
-							<td>10/09/2024</td> 
-							<td>36 </td> 
-							<td>100</td>
-							<td>Accepted</td>
-						</tr>
-					
-					</tbody>
-				</table>
+    <!-- Container for the content inside the header section -->
+    <div class="w3-row-padding w3-padding-64 w3-container">
+        <div class="w3-content">
+            <div class="w3-center">
 
-				<form id="change-status-form" asp-action="" method="post">
-					<h2>Claim Info</h2>
-					<p /><input type="text" name="ClaimID" placeholder="Claim ID" required />
-					<h3>Claim Approval</h3>
-					<p /><input type="radio" name="approval" value="True"> Approved
-					<p /><input type="radio" name="approval" value="False"> Rejected
-					<p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
-				</form>
-				<br/>
-			</div>
-		</div>
-	</div>
+                <!-- Table for displaying claim details -->
+                <table class="table">
+                    <thead>
+                        <!-- Table headers for Claim details -->
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Date</th>
+                            <th>Hours Worked</th>
+                            <th>Hourly Rate</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example row with claim information -->
+                        <tr>
+                            <td>001</td>
+                            <td>10/09/2024</td>
+                            <td>36</td>
+                            <td>100</td>
+                            <td>Accepted</td>
+                        </tr>
+                    </tbody>
+                </table>
 
+                <!-- Form for changing claim status (approve or reject) -->
+                <form id="change-status-form" asp-action="" method="post">
+                    <h2>Claim Info</h2>
+                    <p /><input type="text" name="ClaimID" placeholder="Claim ID" required />
+                    <h3>Claim Approval</h3>
+                    <p /><input type="radio" name="approval" value="True"> Approved
+                    <p /><input type="radio" name="approval" value="False"> Rejected
+
+                    <!-- Submit button to submit the form -->
+                    <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
 </header>
 
+<!-- Page Body Section -->
 <body style="background-color: #ffcccc;">
 </body>
+

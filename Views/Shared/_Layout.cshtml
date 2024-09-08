@@ -1,20 +1,24 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for character set and responsive design -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Title of the page, dynamically set using ViewData -->
     <title>@ViewData["Title"] - CMCSapp_ST10311777</title>
 
+    <!-- Link to external stylesheets -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CMCSapp_ST10311777.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <!-- Internal CSS for body and heading styles -->
+
+    <!-- Internal CSS for additional body and heading styles -->
     <style>
+
         body, h1, h2, h3, h4, h5 {
             font-family: "Poppins", sans-serif
         }
@@ -24,63 +28,69 @@
         }
 
         .w3-half img {
-            margin-bottom: -6px;
-            margin-top: 16px;
+            margin-bottom: -6px; 
+            margin-top: 16px; 
             opacity: 0.8;
-            cursor: pointer
+            cursor: pointer; 
         }
 
             .w3-half img:hover {
                 opacity: 1
             }
     </style>
-
 </head>
 <body>
-    
-    <!-- Navbar -->
-    <div class="w3-top">
-	    <div class="w3-bar w3-red w3-card w3-center w3-large">
-		    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-		    <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large w3-red">CMCS</a>
-		    <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Approve Claim</a>
-            <a asp-area="" asp-controller="Home" asp-action="LecturerPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Create Claim</a>
-	    </div>
 
-	    <!-- Navbar on small screens -->
-	    <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
+    <!-- Navbar Section -->
+    <div class="w3-top">
+        <!-- Main Navbar for larger screens -->
+        <div class="w3-bar w3-red w3-card w3-center w3-large">
+            <!-- Toggle menu button for small screens -->
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red"
+               href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large w3-red">CMCS</a>
+            <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Approve Claim</a>
+            <a asp-area="" asp-controller="Home" asp-action="LecturerPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Create Claim</a>
+        </div>
+
+        <!-- Navbar for small screens (mobile view) -->
+        <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
             <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large">Home</a>
             <a asp-area="" asp-controller="Home" asp-action="LecturerPage" class="w3-bar-item w3-button w3-padding-large">Create Claim</a>
             <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" class="w3-bar-item w3-button w3-padding-large">Approve Claim</a>
-	    </div>
+        </div>
     </div>
 
     <!-- Main content container -->
     <div class="container">
+        <!-- Main content area where page-specific content will be rendered -->
         <main role="main" class="pb-3">
-            <!-- Render the main content of the page -->
+            <!-- Renders the main content of the page -->
             @RenderBody()
         </main>
     </div>
 
-    <!-- Scripts for jQuery, Bootstrap, and site-specific JavaScript -->
+    <!-- Scripts for interactivity -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <!-- Optional script section for additional scripts on specific pages -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 
 <script>
-    // Used to toggle the menu on small screens when clicking on the menu button
+    // Function to toggle the navigation menu on small screens
     function myFunction() {
         var x = document.getElementById("navDemo");
+        // Checks if the menu is currently hidden
         if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
+            x.className += " w3-show"; // Shows the menu
         } else {
-            x.className = x.className.replace(" w3-show", "");
+            x.className = x.className.replace(" w3-show", ""); // Hides the menu
         }
     }
 </script>
+
 

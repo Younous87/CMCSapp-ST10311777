@@ -1,29 +1,45 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page"; // Sets the title of the page to "Home Page"
 }
 
-<!-- Header -->
+<!-- Header Section -->
 <header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
+	<!-- Main Welcome Heading with a large red text -->
 	<h1 class="w3-jumbo w3-text-red"><b>Welcome</b></h1>
+    
+	<!-- Centered red horizontal bar with rounded corners, used as a separator -->
 	<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
+    
+	<!-- Container for the content inside the header section -->
 	<div class="w3-row-padding w3-padding-64 w3-container">
 		<div class="w3-content">
 			<div class="w3-center">
+				<!-- Heading describing the system -->
 				<h1>This is the Contract Monthly Claim System (CMCS)</h1>
 				<br />
 				<br />
+				<!-- Subheading asking user to choose a role -->
 				<h3>Are you a:</h3>
-				<a asp-area="" asp-controller="Home" asp-action="LecturerPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Lecturer</button></a>
+
+				<!-- Button linking to the Lecturer page -->
+				<a asp-area="" asp-controller="Home" asp-action="LecturerPage">
+					<button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Lecturer</button>
+				</a>
 				<br />
-				<a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Manager/Coordinator</button></a>
+                
+				<!-- Button linking to the Manager/Coordinator page -->
+				<a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage">
+					<button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Manager/Coordinator</button>
+				</a>
 			</div>
 		</div>
 	</div>
-
 </header>
 
+<!-- Page Body Section -->
 <body style="background-color: #ffcccc;">
 </body>
+
 
 
 
