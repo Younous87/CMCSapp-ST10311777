@@ -1,18 +1,37 @@
-﻿@model dynamic
-
-@{
-	Layout = null;
+﻿@{
+	ViewData["Title"] = "Home Page";
 }
 
-<!DOCTYPE html>
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
 
-<html>
-<head>
-	<title>title</title>
-</head>
-<body>
-<div>
-	  
+	<!-- Main container for the dashboard content -->
+	<div class="w3-container" style="margin-top:80px" id="showcase">
+		
+
+		<!-- Section for quick additions (Product, Customer Profile, Order, Contract) -->
+		<h1 class="w3-xxxlarge w3-text-red"><b>Claim</b></h1>
+		<hr style="width:50px;border:5px solid red" class="w3-round">
+
+		<!-- Form for adding a new customer profile -->
+		<form id="add-customer-profile-form" asp-action="" method="post">
+			<h3>Claim Info</h3>
+			<p /><input type="text" name="HoursWorked" placeholder="Hours Worked" required />
+			<p /><input type="text" name="HourlyRate" placeholder="Hourly Rate" required />
+			<p /><button class="w3-button w3-light-grey w3-padding-small w3-hover-grey" type="submit">Submit</button>
+			<!-- Placeholder for form submission messages -->
+			<div id="add-customer-profile-message"></div>
+		</form>
+		<br />
+
+		<!-- Form for uploading a contract -->
+		<form id="upload-contract-form" asp-action="" method="post" enctype="multipart/form-data">
+			<h3>Supporting Documents</h3>
+			<p /><input type="file" name="file" required />
+			<p /><button class="w3-button w3-light-grey w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
+			<!-- Placeholder for form submission messages -->
+			<div id="upload-contract-message"></div>
+		</form>
+		<br />
+
+	</div>
 </div>
-</body>
-</html>

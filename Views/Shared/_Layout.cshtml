@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    !-- Internal CSS for body and heading styles -->
+    <!-- Internal CSS for body and heading styles -->
     <style>
         body, h1, h2, h3, h4, h5 {
             font-family: "Poppins", sans-serif
@@ -37,7 +37,7 @@
 
 </head>
 <body>
-    <!-- Sidebar/menu -->
+    @* <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar">
         <br>
         <!-- Button for closing the sidebar on small screens -->
@@ -54,11 +54,11 @@
             <a asp-area="" asp-controller="Home" asp-action="LecturerPage" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Create Claim</a>
             <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Approve Claim</a>
 @*             <a asp-area="" asp-controller="Home" asp-action="Contract" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contract</a>
-            <a asp-area="" asp-controller="Home" asp-action="Order" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Order</a> *@
+            <a asp-area="" asp-controller="Home" asp-action="Order" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Order</a> 
         </div>
-    </nav>
+    </nav> *@
 
-    <!-- Top menu for small screens -->
+    @* <!-- Top menu for small screens -->
     <header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
         <!-- Button for opening the sidebar -->
         <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
@@ -67,6 +67,24 @@
 
     <!-- Overlay effect when opening sidebar on small screens -->
     <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+ *@
+    
+    <!-- Navbar -->
+    <div class="w3-top">
+	    <div class="w3-bar w3-red w3-card w3-left-align w3-large">
+		    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="LecturerPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Create Claim</a>
+            <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Approve Claim</a>
+	    </div>
+
+	    <!-- Navbar on small screens -->
+	    <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="LecturerPage" class="w3-bar-item w3-button w3-padding-large">Create Claim</a>
+            <a asp-area="" asp-controller="Home" asp-action="CoordAndManagPage" class="w3-bar-item w3-button w3-padding-large">Approve Claim</a>
+	    </div>
+    </div>
 
     <!-- Main content container -->
     <div class="container">
@@ -76,11 +94,11 @@
         </main>
     </div>
 
-    <!-- Footer section -->
+@*     <!-- Footer section -->
     <footer class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px">
         <div><p class="w3-right">2024 - ST10311777_PROG6212_POE </p></div>
     </footer>
-
+ *@
     <!-- Scripts for jQuery, Bootstrap, and site-specific JavaScript -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -90,7 +108,7 @@
 </body>
 </html>
 
-<script>
+@* <script>
     // Script to open and close the sidebar on small screens
     function w3_open() {
         document.getElementById("mySidebar").style.display = "block";
@@ -102,4 +120,17 @@
         document.getElementById("mySidebar").style.display = "none";
         document.getElementById("myOverlay").style.display = "none";
     }
+</script> *@
+
+<script>
+    // Used to toggle the menu on small screens when clicking on the menu button
+    function myFunction() {
+        var x = document.getElementById("navDemo");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
 </script>
+

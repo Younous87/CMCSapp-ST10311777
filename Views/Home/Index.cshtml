@@ -2,7 +2,38 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+	<!-- Main container for the dashboard content -->
+	<div class="w3-container" style="margin-top:80px" id="showcase">
+		<!-- Dashboard heading -->
+		<h1 class="w3-jumbo"><b>Dashboard</b></h1>
+		<br />
+
+		<!-- Displaying dashboard widgets -->
+		<div class="w3-row-padding w3-margin-bottom">
+			<!-- Customers Widget -->
+			<div class="w3-quarter">
+				<div class="w3-container w3-blue w3-padding-16">
+					<div class="w3-left"><i class="fa fa-user w3-xxxlarge"></i></div>
+					<div class="w3-right"><h2>0</h2></div>
+					<div class="w3-clear"></div>
+					<h4>Claims</h4>
+				</div>
+			</div>
+			<!-- Contracts Widget -->
+			<div class="w3-quarter">
+				<div class="w3-container w3-teal w3-text-white w3-padding-16">
+					<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+					<div><h2>0</h2></div>
+					<div class="w3-clear"></div>
+					<h4>Documents</h4>
+				</div>
+			</div>
+		</div>
+		
+
+	</div>
 </div>
+
+
