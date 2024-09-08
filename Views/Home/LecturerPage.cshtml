@@ -2,22 +2,65 @@
 	ViewData["Title"] = "Home Page";
 }
 
-<div class="w3-main" style="margin-left:340px;margin-right:40px">
+<header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
+	<h1 class="w3-jumbo w3-text-red"><b>Claim</b></h1>
+	<!-- Centered Shorter Red Bar -->
+	<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
+	<div class="w3-row-padding w3-padding-64 w3-container">
+		<div class="w3-content">
+			<div class="w3-center">
+				<!-- Section for quick additions (Product, Customer Profile, Order, Contract) -->
+				<h1 class="w3-jumbo w3-text-red"><b>Claim</b></h1>
+
+				<!-- Centered Shorter Red Bar -->
+				<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
+
+				<!-- Form for adding a new customer profile -->
+				<form id="add-customer-profile-form" asp-action="" method="post">
+					<h2>Claim Info</h2>
+					<p /><input type="text" name="HoursWorked" placeholder="Hours Worked" required />
+					<p /><input type="text" name="HourlyRate" placeholder="Hourly Rate" required />
+					<p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
+					<!-- Placeholder for form submission messages -->
+					<div id="add-customer-profile-message"></div>
+				</form>
+				<br />
+
+				<!-- Form for uploading a contract -->
+				<form id="upload-contract-form" asp-action="" method="post" enctype="multipart/form-data">
+					<h2>Supporting Documents</h2>
+					<p /><input type="file" name="file" required />
+					<p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
+					<!-- Placeholder for form submission messages -->
+					<div id="upload-contract-message"></div>
+				</form>
+				<br />
+			</div>
+		</div>
+	</div>
+
+</header>
+
+<body style="background-color: #ffcccc;">
+<!-- Your page content here -->
+
+<div class="w3-main w3-center">
 
 	<!-- Main container for the dashboard content -->
 	<div class="w3-container" style="margin-top:80px" id="showcase">
-		
 
 		<!-- Section for quick additions (Product, Customer Profile, Order, Contract) -->
-		<h1 class="w3-xxxlarge w3-text-red"><b>Claim</b></h1>
-		<hr style="width:50px;border:5px solid red" class="w3-round">
+		<h1 class="w3-jumbo w3-text-red"><b>Claim</b></h1>
+
+		<!-- Centered Shorter Red Bar -->
+		<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
 
 		<!-- Form for adding a new customer profile -->
 		<form id="add-customer-profile-form" asp-action="" method="post">
-			<h3>Claim Info</h3>
+			<h2>Claim Info</h2>
 			<p /><input type="text" name="HoursWorked" placeholder="Hours Worked" required />
 			<p /><input type="text" name="HourlyRate" placeholder="Hourly Rate" required />
-			<p /><button class="w3-button w3-light-grey w3-padding-small w3-hover-grey" type="submit">Submit</button>
+			<p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
 			<!-- Placeholder for form submission messages -->
 			<div id="add-customer-profile-message"></div>
 		</form>
@@ -25,9 +68,9 @@
 
 		<!-- Form for uploading a contract -->
 		<form id="upload-contract-form" asp-action="" method="post" enctype="multipart/form-data">
-			<h3>Supporting Documents</h3>
+			<h2>Supporting Documents</h2>
 			<p /><input type="file" name="file" required />
-			<p /><button class="w3-button w3-light-grey w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
+			<p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
 			<!-- Placeholder for form submission messages -->
 			<div id="upload-contract-message"></div>
 		</form>
@@ -35,3 +78,7 @@
 
 	</div>
 </div>
+</body>
+
+
+

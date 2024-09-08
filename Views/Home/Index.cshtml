@@ -3,56 +3,28 @@
 }
 
 <!-- Header -->
-<header class="w3-container w3-center" style="padding:120px ">
+<header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
 	<h1 class="w3-jumbo w3-text-red"><b>Welcome</b></h1>
+	<!-- Centered Shorter Red Bar -->
+	<div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
 	<div class="w3-row-padding w3-padding-64 w3-container">
 		<div class="w3-content">
 			<div class="w3-center">
-				<hr style="width:1px;border:5px solid red" class="w3-round w3-center">
 				<h1>This is the Contract Monthly Claim System (CMCS)</h1>
-				<h3 class="w3-padding-32">Please Identifie yourself are you a Lecturer or Manager/Coordinater </h3>
+				<h2 class="w3-padding-32">Please Identifie yourself</h2>
+				<h3>Are you a:</h3>
+				<a asp-area="" asp-controller="Home" asp-action="LecturerPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Lecturer</button></a>
+				<br />
+				<a asp-area="" asp-controller="Home" asp-action="LecturerPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Manager/Coordinator</button></a>
 			</div>
 		</div>
 	</div>
-
-	<a asp-area="" asp-controller="Home" asp-action="LecturerPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Lecturer</button></a>
-	<br />
-	<a asp-area="" asp-controller="Home" asp-action="LecturerPage"><button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Manager/Coordinator</button></a>
 
 </header>
-@* 
-<div class="w3-main">
 
-	<!-- Main container for the dashboard content -->
-	<div class="w3-container" style="margin-top:80px" id="showcase">
-		<!-- Dashboard heading -->
-		<h1 class="w3-jumbo"><b>Dashboard</b></h1>
-		<br/>
+<body style="background-color: #ffcccc;">
+<!-- Your page content here -->
+</body>
 
-		<!-- Displaying dashboard widgets -->
-		<div class="w3-row-padding w3-margin-bottom">
-			<!-- Customers Widget -->
-			<div class="w3-quarter">
-				<div class="w3-container w3-blue w3-padding-16">
-					<div class="w3-left"><i class="fa fa-user w3-xxxlarge"></i></div>
-					<div class="w3-right">
-						<h2>0</h2></div>
-					<div class="w3-clear"></div>
-					<h4>Claims</h4>
-				</div>
-			</div>
-			<!-- Contracts Widget -->
-			<div class="w3-quarter">
-				<div class="w3-container w3-teal w3-text-white w3-padding-16">
-					<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
-					<div>
-						<h2>0</h2></div>
-					<div class="w3-clear"></div>
-					<h4>Documents</h4>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> *@
 
 
