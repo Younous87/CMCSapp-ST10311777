@@ -23,6 +23,16 @@ namespace CMCSapp_ST10311777.Controllers
 			return View();
 		}
 
+		public IActionResult LecturerPage()
+		{
+			return View();
+		}
+
+		public IActionResult CoordAndManagPage()
+		{
+			return View();
+		}
+
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
