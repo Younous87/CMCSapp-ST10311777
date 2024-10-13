@@ -12,6 +12,7 @@ namespace CMCSapp_ST10311777.Controllers
 	public class HomeController : Controller
 	{
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+        public ClaimTable claimTable = new();
 
         private readonly ILogger<HomeController> _logger;
 
@@ -37,17 +38,55 @@ namespace CMCSapp_ST10311777.Controllers
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
+        [HttpGet]
         public IActionResult LecturerPage()
 		{
-			return View();
+
+            // Retrieve all products from the database
+            List<ClaimTable> claims = claimTable.GetAllClaims();
+
+            // Pass the products and userID to the view
+            ViewData["Claims"] = claims;
+
+            // Return the view with the products
+            return View(claims);
+
 		}
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
         public IActionResult CoordAndManagPage()
 		{
-			return View();
+            // Retrieve all products from the database
+            List<ClaimTable> claims = claimTable.GetAllClaims();
+
+            // Pass the products and userID to the view
+            ViewData["Claims"] = claims;
+
+            return View(claims);
 		}
+
+        // POST method to add a new customer profile
+        [HttpPost]
+        public async Task<IActionResult> AddClaim(ClaimTable claim)
+        {
+
+            claim.status = "Pending";
+            claim.TotalAmount = claim.HourlyRate * claim.HoursWorked;
+            claimTable.CreateClaim(claim);
+
+
+            return RedirectToAction("LecturerPage");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateApprovalStatus(int claimID, string status)
+        {
+            // Update the product's availability in the database
+            claimTable.UpdateStatus(claimID, status);
+            // Redirect to the MyWork action
+            return RedirectToAction("CoordAndManagPage");
+        }
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 

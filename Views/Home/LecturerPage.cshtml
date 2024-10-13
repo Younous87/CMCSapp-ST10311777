@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<ClaimTable>
+@{
+    var claims = ViewData["Claims"] as List<ClaimTable>;
     ViewData["Title"] = "Create Claim"; // Sets the title of the page to "Create Claim"
 }
 
@@ -22,37 +24,42 @@
                         <tr>
                             <!-- Table Headers -->
                             <th>Claim ID</th>
-                            <th>Date</th>
+@*                             <th>Date</th> *@
                             <th>Hours Worked</th>
                             <th>Hourly Rate</th>
+                            <th>Total Amount</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Example Data Row for a Claim -->
-                        <tr>
-                            <td>001</td>
-                            <td>10/09/2024</td>
-                            <td>36</td>
-                            <td>100</td>
-                            <td>Accepted</td>
-                        </tr>
+                        @foreach (var claim in claims) // Loop through each customer profile in the model
+                    {
+	                    <tr>
+		                    <td>@claim.ClaimID </td> 
+		                    <td>@claim.HoursWorked </td> 
+		                    <td>@claim.HourlyRate </td> 
+		                    <td>@claim.TotalAmount </td> 
+		                    <td>@claim.status </td> 
+	                    </tr>
+                    }
                     </tbody>
                 </table>
                 <br />
 
                 <!-- Form Section for Adding New Claim -->
-                <form id="add-claim-form" asp-action="" method="post">
+                <form id="add-claim-form" asp-action="AddClaim" method="post">
                     <h2>Claim Info</h2>
-                    <p /><input type="text" name="HoursWorked" placeholder="Hours Worked" required />
-                    <p /><input type="text" name="HourlyRate" placeholder="Hourly Rate" required />
+                    <p /><input type="number" name="HoursWorked" placeholder="Hours Worked" required />
+                    <p /><input type="number" name="HourlyRate" placeholder="Hourly Rate" required />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
                 </form>
                 <br />
 
                 <!-- Form Section for Uploading Supporting Documents -->
                 <form id="upload-documents-form" asp-action="" method="post" enctype="multipart/form-data">
-                    <h2>Supporting Documents</h2>
+	                <h2>Supporting Documents</h2>
+	                <h3>Enter Claim ID</h3>
+	                <p /><input type="text" name="claimID" placeholder="Claim ID" required />
                     <p /><input type="file" name="file" required />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
                 </form>
