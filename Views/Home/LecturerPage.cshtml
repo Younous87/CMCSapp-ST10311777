@@ -1,6 +1,7 @@
 ﻿@model List<ClaimTable>
 @{
     var claims = ViewData["Claims"] as List<ClaimTable>;
+    var documents = ViewData["Documents"] as List<DocumentTable>;
     ViewData["Title"] = "Create Claim"; // Sets the title of the page to "Create Claim"
 }
 
@@ -24,7 +25,7 @@
                         <tr>
                             <!-- Table Headers -->
                             <th>Claim ID</th>
-@*                             <th>Date</th> *@
+                            <th>Date</th>
                             <th>Hours Worked</th>
                             <th>Hourly Rate</th>
                             <th>Total Amount</th>
@@ -36,6 +37,7 @@
                     {
 	                    <tr>
 		                    <td>@claim.ClaimID </td> 
+                                <td>@claim.dateTime.ToString("dd/MMM/yyyy") </td>
 		                    <td>@claim.HoursWorked </td> 
 		                    <td>@claim.HourlyRate </td> 
 		                    <td>@claim.TotalAmount </td> 
@@ -43,6 +45,30 @@
 	                    </tr>
                     }
                     </tbody>
+                </table>
+                <br />
+                
+                <!-- Claim List Table Section -->
+                <h2>Document List</h2>
+                <table class="table">
+	                <thead>
+	                <tr>
+		                <!-- Table Headers -->
+		                <th>Claim ID</th>
+		                <th>Document Name</th>
+		                <th>Upload Date</th>
+	                </tr>
+	                </thead>
+	                <tbody>
+	                @foreach (var document in documents) // Loop through each customer profile in the model
+	                {
+		                <tr>
+			                <td>@document.ClaimID </td> 
+                            <td>@document.DocumentName </td>
+                                <td>@document.dateTime.ToString("dd/MMM/yyyy HH:mm") </td>
+                            </tr>
+	                }
+	                </tbody>
                 </table>
                 <br />
 
@@ -56,10 +82,10 @@
                 <br />
 
                 <!-- Form Section for Uploading Supporting Documents -->
-                <form id="upload-documents-form" asp-action="UploadImage" method="post" enctype="multipart/form-data">
+                <form id="upload-documents-form" asp-action="UploadDocument" method="post" enctype="multipart/form-data">
 	                <h2>Supporting Documents</h2>
 	                <h3>Enter Claim ID</h3>
-	                @* <p /><input type="text" name="claimID" placeholder="Claim ID" required /> *@
+	                <p /><input type="number" name="ClaimID" placeholder="Claim ID" required />
                     <p /><input type="file" name="file" required />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
                 </form>

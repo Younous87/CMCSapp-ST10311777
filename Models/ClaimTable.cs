@@ -18,14 +18,15 @@ namespace CMCSapp_ST10311777.Models
         public decimal HourlyRate { get; set; }
         public decimal TotalAmount { get; set; }
         public string status { get; set; }
+        public DateTime dateTime { get; set; }
 
-        // Method to insert a product into the database
-        public int CreateClaim(ClaimTable p)
+		// Method to insert a product into the database
+		public int CreateClaim(ClaimTable p)
         {
             try
             {
                 // Define the SQL query to insert a new product
-                string sql = "INSERT INTO claimTable (hoursWorked, hourlyRate, totalAmount, status) VALUES (@HoursWorked, @HourlyRate, @TotalAmount, @status)";
+                string sql = "INSERT INTO claimTable (hoursWorked, hourlyRate, totalAmount, status, claimDate) VALUES (@HoursWorked, @HourlyRate, @TotalAmount, @status, @DateTime)";
                 SqlCommand cmd = new SqlCommand(sql, con);
 
                 // Add parameters to the SqlCommand
@@ -33,9 +34,10 @@ namespace CMCSapp_ST10311777.Models
                 cmd.Parameters.AddWithValue("@HourlyRate", p.HourlyRate);
                 cmd.Parameters.AddWithValue("@TotalAmount", p.TotalAmount);
                 cmd.Parameters.AddWithValue("@status", p.status);
+                cmd.Parameters.AddWithValue("@DateTime", p.dateTime);
 
-                // Open the SqlConnection
-                con.Open();
+				// Open the SqlConnection
+				con.Open();
 
                 // Execute the SqlCommand to insert the product
                 int rowsAffected = cmd.ExecuteNonQuery();
@@ -80,7 +82,8 @@ namespace CMCSapp_ST10311777.Models
                     claim.HoursWorked = (decimal)rdr["hoursWorked"];
                     claim.HourlyRate = (decimal)rdr["hourlyRate"];
                     claim.TotalAmount = (decimal)rdr["totalAmount"];
-                    claim.status = rdr["status"].ToString();
+                    claim.dateTime = (DateTime)rdr["claimDate"];
+					claim.status = rdr["status"].ToString();
 
                     // Add the product to the list
                     claims.Add(claim);

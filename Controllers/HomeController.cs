@@ -15,7 +15,9 @@ namespace CMCSapp_ST10311777.Controllers
 	{
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
         public ClaimTable claimTable = new();
+        public DocumentTable documentTable = new();
         private readonly BlobService _blobService;
+        
 
 		private readonly ILogger<HomeController> _logger;
 
@@ -48,12 +50,18 @@ namespace CMCSapp_ST10311777.Controllers
 
             // Retrieve all products from the database
             List<ClaimTable> claims = claimTable.GetAllClaims();
+            
+            List<DocumentTable> documents = documentTable.GetAllDocuments();
+            //List<DocumentTable> documentsWithID = documentTable.GetDocumentsByClaimId()
+			Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
 
             // Pass the products and userID to the view
             ViewData["Claims"] = claims;
+            ViewData["Documents"] = documents;
+            ViewData["docNames"] = docName;
 
-            // Return the view with the products
-            return View(claims);
+			// Return the view with the products
+			return View(claims);
 
 		}
 
@@ -74,8 +82,10 @@ namespace CMCSapp_ST10311777.Controllers
         [HttpPost]
         public async Task<IActionResult> AddClaim(ClaimTable claim)
         {
+	        DateTime localDate = DateTime.Now;
 
-            claim.status = "Pending";
+	        claim.dateTime = localDate;
+			claim.status = "Pending";
             claim.TotalAmount = claim.HourlyRate * claim.HoursWorked;
             claimTable.CreateClaim(claim);
 
@@ -94,13 +104,21 @@ namespace CMCSapp_ST10311777.Controllers
 
         // POST method to upload an image to blob storage
         [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<IActionResult> UploadDocument(DocumentTable document ,IFormFile file)
         {
-	        if (file != null)
+	        DateTime localDate = DateTime.Now;
+
+			if (file != null)
 	        {
 		        using var stream = file.OpenReadStream();
 		        await _blobService.UploadBlobAsync("claim-documents", file.FileName, stream); // Upload image to blob storage
+
+		        document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", file.FileName);
+                document.dateTime = localDate;
+                document.DocumentName = file.FileName;
+		        documentTable.NewDocument(document);
 	        }
+
 	        return RedirectToAction("LecturerPage");
         }
 
