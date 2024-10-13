@@ -1,6 +1,8 @@
 using CMCSapp_ST10311777.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using CMCSapp_ST10311777.Services;
+
 /// <summary>
 /// Name:           Y.Houssen
 /// Student:        ST10311777
@@ -13,13 +15,15 @@ namespace CMCSapp_ST10311777.Controllers
 	{
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
         public ClaimTable claimTable = new();
+        private readonly BlobService _blobService;
 
-        private readonly ILogger<HomeController> _logger;
+		private readonly ILogger<HomeController> _logger;
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(BlobService blobService, ILogger<HomeController> logger)
 		{
 			_logger = logger;
+			_blobService = blobService;
 		}
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
@@ -88,9 +92,21 @@ namespace CMCSapp_ST10311777.Controllers
             return RedirectToAction("CoordAndManagPage");
         }
 
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+        // POST method to upload an image to blob storage
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+	        if (file != null)
+	        {
+		        using var stream = file.OpenReadStream();
+		        await _blobService.UploadBlobAsync("claim-documents", file.FileName, stream); // Upload image to blob storage
+	        }
+	        return RedirectToAction("LecturerPage");
+        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

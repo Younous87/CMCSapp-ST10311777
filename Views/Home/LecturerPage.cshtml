@@ -56,10 +56,10 @@
                 <br />
 
                 <!-- Form Section for Uploading Supporting Documents -->
-                <form id="upload-documents-form" asp-action="" method="post" enctype="multipart/form-data">
+                <form id="upload-documents-form" asp-action="UploadImage" method="post" enctype="multipart/form-data">
 	                <h2>Supporting Documents</h2>
 	                <h3>Enter Claim ID</h3>
-	                <p /><input type="text" name="claimID" placeholder="Claim ID" required />
+	                @* <p /><input type="text" name="claimID" placeholder="Claim ID" required /> *@
                     <p /><input type="file" name="file" required />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
                 </form>
