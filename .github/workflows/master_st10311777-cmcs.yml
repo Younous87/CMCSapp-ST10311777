@@ -53,4 +53,4 @@ jobs:
           app-name: 'st10311777-CMCS'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CC54B5C7EC104B989E1B1788D391514B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76E317B3C2EC47188FD39E2B12C89F68 }}
