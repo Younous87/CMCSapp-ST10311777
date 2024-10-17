@@ -51,7 +51,7 @@
                     </thead>
                     <tbody>
                         @foreach (var claim in claims) // Loop through each customer profile in the model
-                    {
+						{
 	                    <tr>
 		                    <td>@claim.ClaimID </td> 
                                 <td>@claim.dateTime.ToString("dd/MMM/yyyy") </td>
@@ -60,12 +60,12 @@
 		                    <td>@claim.TotalAmount </td> 
 		                    <td>@claim.status </td> 
 	                    </tr>
-                    }
+						}
                     </tbody>
                 </table>
                 <br />
                 
-                <!-- Claim List Table Section -->
+                <!-- Document List Table Section -->
                 <h2>Document List</h2>
                 <table class="table">
 	                <thead>
@@ -74,7 +74,7 @@
 		                <th>Claim ID</th>
 		                <th>Document Name</th>
 		                <th>Upload Date</th>
-		                <th>Actions</th> <!-- Column for actions that can be taken on the file -->
+		                <th>Actions</th> 
 	                </tr>
 	                </thead>
 	                <tbody>
