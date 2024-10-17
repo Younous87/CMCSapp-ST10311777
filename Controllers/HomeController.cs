@@ -13,182 +13,205 @@ namespace CMCSapp_ST10311777.Controllers
 {
 	public class HomeController : Controller
 	{
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-        public ClaimTable claimTable = new();
-        public DocumentTable documentTable = new();
-        private readonly BlobService _blobService;
 
-        
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
+		// Initialize claim and document tables to interact with claims and documents data
+		public ClaimTable claimTable = new();
+		public DocumentTable documentTable = new();
+
+		// Service for blob storage
+		private readonly BlobService _blobService;
+
+		// Logger service for logging errors, information, and warnings
 		private readonly ILogger<HomeController> _logger;
+
+		// Configuration service for accessing app settings
 		private readonly IConfiguration _configuration;
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-		public HomeController(IConfiguration configuration,BlobService blobService, ILogger<HomeController> logger)
+
+		// Constructor to inject services
+		public HomeController(IConfiguration configuration, BlobService blobService, ILogger<HomeController> logger)
 		{
 			_logger = logger;
 			_blobService = blobService;
 			_configuration = configuration;
 		}
 
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
-        public IActionResult Index()
+		// Default action for home page
+		public IActionResult Index()
 		{
 			return View();
-		}
-
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-
-        public IActionResult Privacy()
-		{
-			return View();
-		}
-
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-
-        [HttpGet]
-        public IActionResult LecturerPage()
-		{
-
-            // Retrieve all products from the database
-            _configuration.GetValue<string>("AzureSQLDatabase");
-
-			List<ClaimTable> claims = claimTable.GetAllClaims();
-            
-            List<DocumentTable> documents = documentTable.GetAllDocuments();
-			Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
-
-            // Pass the products and userID to the view
-            ViewData["Claims"] = claims;
-            ViewData["Documents"] = documents;
-            ViewData["docNames"] = docName;
-
-			// Return the view with the products
-			return View(claims);
-
-		}
-
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-
-        public IActionResult CoordAndManagPage()
-		{
-            // Retrieve all products from the database
-            List<ClaimTable> claims = claimTable.GetAllClaims();
-            List<DocumentTable> documents = documentTable.GetAllDocuments();
-            Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
-
-            // Pass the products and userID to the view
-            ViewData["Claims"] = claims;
-            ViewData["Documents"] = documents;
-            ViewData["docNames"] = docName;
-
-            return View(claims);
 		}
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
-		// Action method to download a file
+		// Default action for privacy page
+		public IActionResult Privacy()
+		{
+			return View();
+		}
+
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// Action for LecturerPage to display claims and documents for the lecturer
+		[HttpGet]
+		public IActionResult LecturerPage()
+		{
+			// Retrieve all claims and documents from the database
+			List<ClaimTable> claims = claimTable.GetAllClaims();
+			List<DocumentTable> documents = documentTable.GetAllDocuments();
+
+			// Fetch blob names from blob storage asynchronously
+			Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
+
+			// Pass claims, documents, and blob names to the view using ViewData
+			ViewData["Claims"] = claims;
+			ViewData["Documents"] = documents;
+			ViewData["docNames"] = docName;
+
+			// Return view displaying claims
+			return View(claims);
+		}
+
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// Action for CoordAndManagPage for coordinators and managers to view claims and documents
+		public IActionResult CoordAndManagPage()
+		{
+			// Retrieve all claims and documents from the database
+			List<ClaimTable> claims = claimTable.GetAllClaims();
+			List<DocumentTable> documents = documentTable.GetAllDocuments();
+
+			// Fetch blob names from blob storage asynchronously
+			Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
+
+			// Pass claims, documents, and blob names to the view using ViewData
+			ViewData["Claims"] = claims;
+			ViewData["Documents"] = documents;
+			ViewData["docNames"] = docName;
+
+			// Return view displaying claim
+			return View(claims);
+		}
+
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// Action method to download a file from blob storage
 		public async Task<IActionResult> DownloadFile(string fileName)
-        {
-            var stream = await _blobService.DownloadBlobAsync("claim-documents", fileName);
-            return File(stream, "application/octet-stream", fileName);
-        }
+		{
+			// Download the file from blob storage
+			var stream = await _blobService.DownloadBlobAsync("claim-documents", fileName);
 
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+			// Return the file as a download
+			return File(stream, "application/octet-stream", fileName);
+		}
 
-		// POST method to add a new customer profile
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// POST action to add a new claim 
 		[HttpPost]
-        public async Task<IActionResult> AddClaim(ClaimTable claim)
-        {
-	        DateTime localDate = DateTime.Now;
+		public async Task<IActionResult> AddClaim(ClaimTable claim)
+		{
+			DateTime localDate = DateTime.Now;
 
-	        // Server-side validation: Ensure HoursWorked and HourlyRate are positive
-	        if (claim.HoursWorked <= 0)
-	        {
-		        ModelState.AddModelError(string.Empty, "Hours Worked must be greater than zero.");
-		        return View("LecturerPage"); // Return the user to the Create Claim view with the error
-	        }
+			// Ensure HoursWorked and HourlyRate are positive before proceeding
+			if (claim.HoursWorked <= 0)
+			{
+				ModelState.AddModelError(string.Empty, "Hours Worked must be greater than zero.");
+				return View("LecturerPage"); // Return to LecturerPage view with error
+			}
 
-	        if (claim.HourlyRate <= 0)
-	        {
-		        ModelState.AddModelError(string.Empty, "Hourly Rate must be greater than zero.");
-		        return View("LecturerPage"); // Return the user to the Create Claim view with the error
-	        }
+			if (claim.HourlyRate <= 0)
+			{
+				ModelState.AddModelError(string.Empty, "Hourly Rate must be greater than zero.");
+				return View("LecturerPage"); // Return to LecturerPage view with error
+			}
 
-
+			// Set the current date and status of the claim
 			claim.dateTime = localDate;
 			claim.status = "Pending";
-            claim.TotalAmount = claim.HourlyRate * claim.HoursWorked;
-            claimTable.CreateClaim(claim);
 
+			// Calculate the total claim amount based on hours worked and hourly rate
+			claim.TotalAmount = claim.HourlyRate * claim.HoursWorked;
 
-            return RedirectToAction("LecturerPage");
-        }
+			// Insert the claim into the database
+			claimTable.CreateClaim(claim);
 
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+			// Redirect to the LecturerPage after adding the claim
+			return RedirectToAction("LecturerPage");
+		}
 
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// POST action to update the approval status of a claim 
 		[HttpPost]
-        public async Task<IActionResult> UpdateApprovalStatus(int claimID, string status)
-        {
-	        // Retrieve all products from the database
-	        List<ClaimTable> claims = claimTable.GetAllClaims();
-	        List<DocumentTable> documents = documentTable.GetAllDocuments();
+		public async Task<IActionResult> UpdateApprovalStatus(int claimID, string status)
+		{
+			// Retrieve all claims and documents from the database
+			List<ClaimTable> claims = claimTable.GetAllClaims();
+			List<DocumentTable> documents = documentTable.GetAllDocuments();
 
-	        // Server-side validation: Check if the ClaimID exists
-	        var claim = claimTable.GetClaimById(claimID); // Assuming GetClaimById is implemented in claimTable
-	        if (claim == null)
-	        {
-		        ViewData["Claims"] = claims;
-		        ViewData["Documents"] = documents;
-
-		        ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
-		        // Instead of redirecting, return the view with the current model
-		        return View("CoordAndManagPage"); // Adjust this to your actual view name and model
-	        }
-			// Update the product's availability in the database
-			claimTable.UpdateStatus(claimID, status);
-            // Redirect to the MyWork action
-            return RedirectToAction("CoordAndManagPage");
-        }
-
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-
-		// POST method to upload an image to blob storage
-		[HttpPost]
-        public async Task<IActionResult> UploadDocument(DocumentTable document ,IFormFile file)
-        {
-	        DateTime localDate = DateTime.Now;
-
-	        // Retrieve all products from the database
-	        List<ClaimTable> claims = claimTable.GetAllClaims();
-	        List<DocumentTable> documents = documentTable.GetAllDocuments();
-
-			// Server-side validation: Check if the ClaimID exists
-			var claim = claimTable.GetClaimById(document.ClaimID); // Assuming GetClaimById is implemented in claimTable
-	        if (claim == null)
-	        {
-		        ViewData["Claims"] = claims;
-		        ViewData["Documents"] = documents;
-
+			// Check if the claim exists in the database
+			var claim = claimTable.GetClaimById(claimID);
+			if (claim == null)
+			{
+				// If claim doesn't exist, return the view with an error message
+				ViewData["Claims"] = claims;
+				ViewData["Documents"] = documents;
 				ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
-		        // Instead of redirecting, return the view with the current model
-		        return View("LecturerPage"); // Adjust this to your actual view name and model
-	        }
+				return View("CoordAndManagPage");
+			}
 
+			// Update the claim's status in the database
+			claimTable.UpdateStatus(claimID, status);
+
+			// Redirect to the CoordAndManagPage after updating the claim status
+			return RedirectToAction("CoordAndManagPage");
+		}
+
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+		// POST action to upload a document to blob storage and link it to a claim
+		[HttpPost]
+		public async Task<IActionResult> UploadDocument(DocumentTable document, IFormFile file)
+		{
+			DateTime localDate = DateTime.Now;
+
+			// Retrieve all claims and documents from the database
+			List<ClaimTable> claims = claimTable.GetAllClaims();
+			List<DocumentTable> documents = documentTable.GetAllDocuments();
+
+			// Check if the ClaimID exists before allowing document upload
+			var claim = claimTable.GetClaimById(document.ClaimID); 
+			if (claim == null)
+			{
+				// If claim doesn't exist, return the view with an error message
+				ViewData["Claims"] = claims;
+				ViewData["Documents"] = documents;
+				ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
+				return View("LecturerPage");
+			}
+
+			// If a file is selected, upload it to blob storage
 			if (file != null)
-	        {
-		        using var stream = file.OpenReadStream();
-		        await _blobService.UploadBlobAsync("claim-documents", file.FileName, stream); // Upload image to blob storage
+			{
+				using var stream = file.OpenReadStream();
+				await _blobService.UploadBlobAsync("claim-documents", file.FileName, stream); // Upload file to blob storage
 
-		        document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", file.FileName);
-                document.dateTime = localDate;
-                document.DocumentName = file.FileName;
-		        documentTable.NewDocument(document);
-	        }
+				// Save document details to the database
+				document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", file.FileName);
+				document.dateTime = localDate;
+				document.DocumentName = file.FileName;
+				documentTable.NewDocument(document);
+			}
 
-	        return RedirectToAction("LecturerPage");
-        }
+			// Redirect to the LecturerPage after uploading the document
+			return RedirectToAction("LecturerPage");
+		}
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
@@ -198,6 +221,7 @@ namespace CMCSapp_ST10311777.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
-    }
+		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+	}
+
 }//같같같같같같같같같같같같같같같같같같같같...ooo000 END OF FILE 000ooo...같같같같같같같같같같같같같같같같같같같같//
