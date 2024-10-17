@@ -9,21 +9,18 @@ namespace CMCSapp_ST10311777.Models
     {
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
-	
-
-        //// Define a static connection string for the SQL database
+        // Define a static connection string for the SQL database
         internal static string con_string =
             "Server=tcp:cloudev-sql-server.database.windows.net,1433;Initial Catalog=CLOUD-db;Persist Security Info=False;User ID=admin-youyou;Password=C'esttropcool87;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
-
 
         // Define a static SqlConnection object
         public SqlConnection con = new SqlConnection(con_string);
 
-        public ClaimTable()
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		public ClaimTable()
         {
         }
-
-
 
         //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
@@ -81,8 +78,6 @@ namespace CMCSapp_ST10311777.Models
 		public List<ClaimTable> GetAllClaims()
         {
             List<ClaimTable> claims = new List<ClaimTable>();
-
-
 
 			try
             {
@@ -183,6 +178,6 @@ namespace CMCSapp_ST10311777.Models
 	        return claim; // Return null if no claim is found
         }
 
-
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 	}
-}
+}//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°...ooo000 END OF FILE 000ooo...°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
