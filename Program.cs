@@ -1,4 +1,6 @@
+using CMCSapp_ST10311777.Models;
 using CMCSapp_ST10311777.Services;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +9,18 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddSingleton<BlobService>();
+// Register DatabaseService with the connection string
+builder.Services.AddSingleton<ClaimTable>();
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["AzureStorage:ConnectionString:blob"]!, preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["AzureStorage:ConnectionString:queue"]!, preferMsi: true);
+});
 var app = builder.Build();
+
+
+
+var connectionString = app.Configuration.GetConnectionString("AzureSQLDatabase")!;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

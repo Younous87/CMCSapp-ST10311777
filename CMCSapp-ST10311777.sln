@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMCSapp-ST10311777", "CMCSapp-ST10311777.csproj", "{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMCSapp-ST10311777", "CMCSapp-ST10311777.csproj", "{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMCSappTests", "..\CMCSappTests\CMCSappTests.csproj", "{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

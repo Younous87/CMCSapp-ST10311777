@@ -1,6 +1,7 @@
 ﻿@model List<ClaimTable>
 @{
 	var claims = ViewData["Claims"] as List<ClaimTable>;
+	var documents = ViewData["Documents"] as List<DocumentTable>;
     ViewData["Title"] = "Approve Claim"; // Sets the page title to "Approve Claim"
 }
 
@@ -11,6 +12,22 @@
 
     <!-- Centered red horizontal bar with rounded corners, used as a separator -->
     <div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
+	
+    <!-- Error Messages -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+	    <div class="alert alert-danger">
+		    @foreach (var state in ViewData.ModelState.Values)
+		    {
+			    var firstError = state.Errors.FirstOrDefault();
+			    if (firstError != null)
+			    {
+				    <p>@firstError.ErrorMessage</p>
+				    break; <!-- Exit after displaying the first error -->
+			    }
+		    }
+	    </div>
+    }
 
     <!-- Container for the content inside the header section -->
     <div class="w3-row-padding w3-padding-64 w3-container">
@@ -19,13 +36,14 @@
 
 	            <!-- Table for displaying claim details -->
 	            <!-- Claim List Table Section -->
+	            <!-- Claim List Table Section -->
 	            <h2>Claim List</h2>
 	            <table class="table">
 		            <thead>
 		            <tr>
 			            <!-- Table Headers -->
 			            <th>Claim ID</th>
-			            @*                             <th>Date</th> *@
+			            <th>Date</th>
 			            <th>Hours Worked</th>
 			            <th>Hourly Rate</th>
 			            <th>Total Amount</th>
@@ -37,6 +55,7 @@
 		            {
 			            <tr>
 				            <td>@claim.ClaimID </td> 
+				            <td>@claim.dateTime.ToString("dd/MMM/yyyy") </td>
 				            <td>@claim.HoursWorked </td> 
 				            <td>@claim.HourlyRate </td> 
 				            <td>@claim.TotalAmount </td> 
@@ -45,14 +64,44 @@
 		            }
 		            </tbody>
 	            </table>
+	            <br />
+                
+	            <!-- Claim List Table Section -->
+	            <h2>Document List</h2>
+	            <table class="table">
+		            <thead>
+		            <tr>
+			            <!-- Table Headers -->
+			            <th>Claim ID</th>
+			            <th>Document Name</th>
+			            <th>Upload Date</th>
+			            <th>Actions</th> <!-- Column for actions that can be taken on the file -->
+		            </tr>
+		            </thead>
+		            <tbody>
+		            @foreach (var document in documents) // Loop through each customer profile in the model
+		            {
+			            <tr>
+				            <td>@document.ClaimID </td> 
+				            <td>@document.DocumentName </td>
+				            <td>@document.dateTime.ToString("dd/MMM/yyyy HH:mm") </td>
+				            <td>
+					            <!-- Link to download the file -->
+					            <a asp-controller="Home" asp-action="DownloadFile" asp-route-fileName="@document.DocumentName">Download</a>
+				            </td>
+			            </tr>
+		            }
+		            </tbody>
+	            </table>
+	            <br />
 
                 <!-- Form for changing claim status (approve or reject) -->
 				<form id="change-status-form" asp-action="UpdateApprovalStatus" method="post">
                     <h2>Claim Info</h2>
-                    <p /><input type="text" name="claimID" placeholder="Claim ID" required />
+					<p /><input type="text" name="claimID" placeholder="Claim ID" required min="1" />
                     <h3>Claim Approval</h3>
-					<p /><input type="radio" name="status" value="Approved"> Approved
-					<p /><input type="radio" name="status" value="Rejected"> Rejected
+					<p /><input type="radio" name="status" value="Approved" required> Approved
+					<p /><input type="radio" name="status" value="Rejected" required> Rejected
 
                     <!-- Submit button to submit the form -->
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>

@@ -1,31 +1,48 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Security.Claims;
 
 namespace CMCSapp_ST10311777.Models
 {
     public class ClaimTable
     {
-        // Define a static connection string for the SQL database
+		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+	
+
+        //// Define a static connection string for the SQL database
         internal static string con_string =
             "Server=tcp:cloudev-sql-server.database.windows.net,1433;Initial Catalog=CLOUD-db;Persist Security Info=False;User ID=admin-youyou;Password=C'esttropcool87;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
 
-        // Define a static SqlConnection object
-        public static SqlConnection con = new SqlConnection(con_string);
 
-        // Define properties for the productsTable class
-        public int ClaimID { get; set; }
+        // Define a static SqlConnection object
+        public SqlConnection con = new SqlConnection(con_string);
+
+        public ClaimTable()
+        {
+        }
+
+
+
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		// Define properties for the productsTable class
+		public int ClaimID { get; set; }
         public decimal HoursWorked { get; set; }
         public decimal HourlyRate { get; set; }
         public decimal TotalAmount { get; set; }
         public string status { get; set; }
         public DateTime dateTime { get; set; }
 
-		// Method to insert a product into the database
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		// Method to insert a claim into the database
 		public int CreateClaim(ClaimTable p)
         {
+
             try
             {
-                // Define the SQL query to insert a new product
                 string sql = "INSERT INTO claimTable (hoursWorked, hourlyRate, totalAmount, status, claimDate) VALUES (@HoursWorked, @HourlyRate, @TotalAmount, @status, @DateTime)";
                 SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -36,84 +53,136 @@ namespace CMCSapp_ST10311777.Models
                 cmd.Parameters.AddWithValue("@status", p.status);
                 cmd.Parameters.AddWithValue("@DateTime", p.dateTime);
 
-				// Open the SqlConnection
-				con.Open();
-
-                // Execute the SqlCommand to insert the product
+                con.Open();
                 int rowsAffected = cmd.ExecuteNonQuery();
                 return rowsAffected;
             }
+            catch (SqlException sqlEx)
+            {
+                throw new ApplicationException("Database error occurred while creating the claim: " + sqlEx.Message);
+            }
             catch (Exception ex)
             {
-                throw ex;
+                throw new ApplicationException("An error occurred while creating the claim: " + ex.Message);
             }
             finally
             {
-                // Close the SqlConnection
-                if (con != null)
+                // Ensure the connection is closed even if an exception occurs
+                if (con != null && con.State == ConnectionState.Open)
                 {
-                    con.Close();
+	                con.Close();
                 }
             }
         }
 
-        public List<ClaimTable> GetAllClaims()
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		// Method to get all claims from the database
+		public List<ClaimTable> GetAllClaims()
         {
-            // Initialize a list to store products
             List<ClaimTable> claims = new List<ClaimTable>();
 
-            // Create a new instance of SqlConnection using the connection string
-            using (SqlConnection con = new SqlConnection(con_string))
+
+
+			try
             {
-                // Define the SQL query to select all products
-                string sql = "SELECT * FROM claimTable";
-                SqlCommand cmd = new SqlCommand(sql, con);
-
-                // Open the SqlConnection
-                con.Open();
-
-                // Execute the SqlCommand and read the results
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                using (SqlConnection con = new SqlConnection(con_string))
+                //using (SqlConnection con = GetConnection())
                 {
-                    // Create a new productsTable object for each row
-                    ClaimTable claim = new ClaimTable();
-                    claim.ClaimID = (int)rdr["claimID"];
-                    claim.HoursWorked = (decimal)rdr["hoursWorked"];
-                    claim.HourlyRate = (decimal)rdr["hourlyRate"];
-                    claim.TotalAmount = (decimal)rdr["totalAmount"];
-                    claim.dateTime = (DateTime)rdr["claimDate"];
-					claim.status = rdr["status"].ToString();
+                    string sql = "SELECT * FROM claimTable";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    con.Open();
 
-                    // Add the product to the list
-                    claims.Add(claim);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        ClaimTable claim = new ClaimTable
+                        {
+                            ClaimID = (int)rdr["claimID"],
+                            HoursWorked = (decimal)rdr["hoursWorked"],
+                            HourlyRate = (decimal)rdr["hourlyRate"],
+                            TotalAmount = (decimal)rdr["totalAmount"],
+                            dateTime = (DateTime)rdr["claimDate"],
+                            status = rdr["status"].ToString()
+                        };
+
+                        claims.Add(claim);
+                    }
                 }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ApplicationException("Database error occurred while retrieving claims: " + sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving claims: " + ex.Message);
             }
 
             return claims;
         }
 
-        // Static method to update a product's IsActive status in the database
-        public void UpdateStatus(int claimID, string status)
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		// Method to update claim status
+		public void UpdateStatus(int claimID, string status)
         {
-            // Create a new instance of SqlConnection using the connection string
-            using (SqlConnection con = new SqlConnection(con_string))
+            try
             {
-                // Define the SQL query to update the product's IsActive status
-                string sql = "UPDATE claimTable SET status = @status WHERE claimID = @claimID";
-                SqlCommand cmd = new SqlCommand(sql, con);
+                using (SqlConnection con = new SqlConnection(con_string))
+                //using (SqlConnection con = GetConnection()) 
+                {
+                    string sql = "UPDATE claimTable SET status = @status WHERE claimID = @claimID";
+                    SqlCommand cmd = new SqlCommand(sql, con);
 
-                // Add parameters to the SqlCommand
-                cmd.Parameters.AddWithValue("@status", status);
-                cmd.Parameters.AddWithValue("@claimID", claimID);
+                    cmd.Parameters.AddWithValue("@status", status);
+                    cmd.Parameters.AddWithValue("@claimID", claimID);
 
-                // Open the SqlConnection
-                con.Open();
-
-                // Execute the SqlCommand to update the product
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new ApplicationException("Database error occurred while updating the claim status: " + sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while updating the claim status: " + ex.Message);
             }
         }
 
-    }
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+		public ClaimTable GetClaimById(int claimID)
+        {
+	        ClaimTable claim = null;
+            using (SqlConnection con = new SqlConnection(con_string))
+            //using (SqlConnection con = GetConnection())
+            {
+		        string sql = "SELECT * FROM claimTable WHERE claimID = @ClaimID";
+		        SqlCommand cmd = new SqlCommand(sql, con);
+		        cmd.Parameters.AddWithValue("@ClaimID", claimID);
+
+		        con.Open();
+		        SqlDataReader rdr = cmd.ExecuteReader();
+
+		        if (rdr.Read())
+		        {
+			        // If a record is found, create a ClaimTable object
+			        claim = new ClaimTable();
+			        claim.ClaimID = (int)rdr["claimID"];
+			        claim.HoursWorked = (decimal)rdr["hoursWorked"];
+			        claim.HourlyRate = (decimal)rdr["hourlyRate"];
+			        claim.TotalAmount = (decimal)rdr["totalAmount"];
+			        claim.dateTime = (DateTime)rdr["claimDate"];
+			        claim.status = rdr["status"].ToString();
+		        }
+	        }
+
+	        return claim; // Return null if no claim is found
+        }
+
+
+	}
 }
