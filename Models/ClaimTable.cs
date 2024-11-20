@@ -1,37 +1,39 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Claims;
 
 namespace CMCSapp_ST10311777.Models
 {
+    //[Table("claimTable")]
     public class ClaimTable
     {
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
-        // Define a static connection string for the SQL database
-        internal static string con_string =
-            "Server=tcp:cloudev-sql-server.database.windows.net,1433;Initial Catalog=CLOUD-db;Persist Security Info=False;User ID=admin-youyou;Password=C'esttropcool87;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
+		// Define a static connection string for the SQL database
+		internal static string con_string =
+			"Server=tcp:cloudev-sql-server.database.windows.net,1433;Initial Catalog=CLOUD-db;Persist Security Info=False;User ID=admin-youyou;Password=C'esttropcool87;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
 
-        // Define a static SqlConnection object
-        public SqlConnection con = new SqlConnection(con_string);
+		// Define a static SqlConnection object
+		public SqlConnection con = new SqlConnection(con_string);
 
-        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		//Default constructor
 		public ClaimTable()
-        {
-        }
+		{
+		}
 
-        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		// Define properties for the productsTable class
-		public int ClaimID { get; set; }
-        public decimal HoursWorked { get; set; }
-        public decimal HourlyRate { get; set; }
-        public decimal TotalAmount { get; set; }
+		public int claimID { get; set; }
+        public decimal hoursWorked { get; set; }
+        public decimal hourlyRate { get; set; }
+        public decimal totalAmount { get; set; }
         public string status { get; set; }
-        public DateTime dateTime { get; set; }
+        public DateTime claimDate { get; set; }
 
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
@@ -41,15 +43,15 @@ namespace CMCSapp_ST10311777.Models
 			try
 			{
 				// SQL query to insert a new claim into the claimTable
-				string sql = "INSERT INTO claimTable (hoursWorked, hourlyRate, totalAmount, status, claimDate) VALUES (@HoursWorked, @HourlyRate, @TotalAmount, @status, @DateTime)";
+				string sql = "INSERT INTO claimTable (hoursWorked, hourlyRate, totalAmount, status, claimDate) VALUES (@hoursWorked, @hourlyRate, @totalAmount, @status, @DateTime)";
 				SqlCommand cmd = new SqlCommand(sql, con);
 
 				// Add parameters to the SqlCommand to prevent SQL injection
-				cmd.Parameters.AddWithValue("@HoursWorked", p.HoursWorked);
-				cmd.Parameters.AddWithValue("@HourlyRate", p.HourlyRate);
-				cmd.Parameters.AddWithValue("@TotalAmount", p.TotalAmount);
+				cmd.Parameters.AddWithValue("@hoursWorked", p.hoursWorked);
+				cmd.Parameters.AddWithValue("@hourlyRate", p.hourlyRate);
+				cmd.Parameters.AddWithValue("@totalAmount", p.totalAmount);
 				cmd.Parameters.AddWithValue("@status", p.status);
-				cmd.Parameters.AddWithValue("@DateTime", p.dateTime);
+				cmd.Parameters.AddWithValue("@DateTime", p.claimDate);
 
 				// Open the connection and execute the insert command
 				con.Open();
@@ -76,7 +78,7 @@ namespace CMCSapp_ST10311777.Models
 			}
 		}
 
-		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		////°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		// Method to get all claims from the database
 		public List<ClaimTable> GetAllClaims()
@@ -99,11 +101,11 @@ namespace CMCSapp_ST10311777.Models
 						// Create a ClaimTable object for each record found
 						ClaimTable claim = new ClaimTable
 						{
-							ClaimID = (int)rdr["claimID"],
-							HoursWorked = (decimal)rdr["hoursWorked"],
-							HourlyRate = (decimal)rdr["hourlyRate"],
-							TotalAmount = (decimal)rdr["totalAmount"],
-							dateTime = (DateTime)rdr["claimDate"],
+							claimID = (int)rdr["claimID"],
+							hoursWorked = (decimal)rdr["hoursWorked"],
+							hourlyRate = (decimal)rdr["hourlyRate"],
+							totalAmount = (decimal)rdr["totalAmount"],
+							claimDate = (DateTime)rdr["claimDate"],
 							status = rdr["status"].ToString()
 						};
 
@@ -125,14 +127,14 @@ namespace CMCSapp_ST10311777.Models
 			return claims; // Return the list of claims
 		}
 
-		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		////°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		// Method to update claim status
 		public void UpdateStatus(int claimID, string status)
 		{
 			try
 			{
-				using (SqlConnection con = new SqlConnection(con_string)) 
+				using (SqlConnection con = new SqlConnection(con_string))
 				{
 					// SQL query to update the status of a specific claim identified by claimID
 					string sql = "UPDATE claimTable SET status = @status WHERE claimID = @claimID";
@@ -158,7 +160,7 @@ namespace CMCSapp_ST10311777.Models
 			}
 		}
 
-		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		////°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		// Method to get a claim by its ID
 		public ClaimTable GetClaimById(int claimID)
@@ -167,9 +169,9 @@ namespace CMCSapp_ST10311777.Models
 			using (SqlConnection con = new SqlConnection(con_string)) // Using statement for automatic resource management
 			{
 				// SQL query to select a claim by its claimID
-				string sql = "SELECT * FROM claimTable WHERE claimID = @ClaimID";
+				string sql = "SELECT * FROM claimTable WHERE claimID = @claimID";
 				SqlCommand cmd = new SqlCommand(sql, con);
-				cmd.Parameters.AddWithValue("@ClaimID", claimID);
+				cmd.Parameters.AddWithValue("@claimID", claimID);
 
 				con.Open(); // Open the connection
 				SqlDataReader rdr = cmd.ExecuteReader(); // Execute the query and read the data
@@ -178,11 +180,11 @@ namespace CMCSapp_ST10311777.Models
 				{
 					// If a record is found, create a ClaimTable object
 					claim = new ClaimTable();
-					claim.ClaimID = (int)rdr["claimID"];
-					claim.HoursWorked = (decimal)rdr["hoursWorked"];
-					claim.HourlyRate = (decimal)rdr["hourlyRate"];
-					claim.TotalAmount = (decimal)rdr["totalAmount"];
-					claim.dateTime = (DateTime)rdr["claimDate"];
+					claim.claimID = (int)rdr["claimID"];
+					claim.hoursWorked = (decimal)rdr["hoursWorked"];
+					claim.hourlyRate = (decimal)rdr["hourlyRate"];
+					claim.totalAmount = (decimal)rdr["totalAmount"];
+					claim.claimDate = (DateTime)rdr["claimDate"];
 					claim.status = rdr["status"].ToString();
 				}
 			}

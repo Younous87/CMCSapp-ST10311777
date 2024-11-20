@@ -29,12 +29,12 @@ namespace CMCSapp_ST10311777.Models
 			try
 			{
 				// SQL query to insert a new document record into the documentTable
-				string sql = "INSERT INTO documentTable (documentURL, claimID, uploadDate, documentName) VALUES (@DocumentURL, @ClaimID, @DateTime, @DocumentName)";
+				string sql = "INSERT INTO documentTable (documentURL, claimID, uploadDate, documentName) VALUES (@DocumentURL, @claimID, @DateTime, @DocumentName)";
 				SqlCommand cmd = new SqlCommand(sql, con);
 
 				// Add parameters to the SqlCommand to prevent SQL injection
 				cmd.Parameters.AddWithValue("@DocumentURL", d.DocumentURL); 
-				cmd.Parameters.AddWithValue("@ClaimID", d.ClaimID); 
+				cmd.Parameters.AddWithValue("@claimID", d.ClaimID); 
 				cmd.Parameters.AddWithValue("@DateTime", d.dateTime); 
 				cmd.Parameters.AddWithValue("@DocumentName", d.DocumentName); 
 

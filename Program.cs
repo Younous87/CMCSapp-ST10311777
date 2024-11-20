@@ -1,5 +1,6 @@
 using CMCSapp_ST10311777.Models;
 using CMCSapp_ST10311777.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<BlobService>();
 // Register DatabaseService with the connection string
 builder.Services.AddSingleton<ClaimTable>();
+builder.Services.AddScoped<ClaimVerificationService>();
+
 builder.Services.AddAzureClients(clientBuilder =>
 {
     clientBuilder.AddBlobServiceClient(builder.Configuration["AzureStorage:ConnectionString:blob"]!, preferMsi: true);

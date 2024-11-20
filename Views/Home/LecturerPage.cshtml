@@ -14,16 +14,15 @@
     <div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
     
     <!-- Error Messages -->
+    
     @if (!ViewData.ModelState.IsValid)
     {
 	    <div class="alert alert-danger">
 		    @foreach (var state in ViewData.ModelState.Values)
 		    {
-			    var firstError = state.Errors.FirstOrDefault();
-			    if (firstError != null)
+			    @foreach (var error in state.Errors)
 			    {
-				    <p>@firstError.ErrorMessage</p>
-				    break; <!-- Exit after displaying the first error -->
+				    <p>@error.ErrorMessage</p>
 			    }
 		    }
 	    </div>
@@ -53,11 +52,11 @@
                         @foreach (var claim in claims) // Loop through each customer profile in the model
 						{
 	                    <tr>
-		                    <td>@claim.ClaimID </td> 
-                                <td>@claim.dateTime.ToString("dd/MMM/yyyy") </td>
-		                    <td>@claim.HoursWorked </td> 
-		                    <td>@claim.HourlyRate </td> 
-		                    <td>@claim.TotalAmount </td> 
+		                    <td>@claim.claimID </td> 
+                                <td>@claim.claimDate.ToString("dd/MMM/yyyy") </td>
+		                    <td>@claim.hoursWorked </td> 
+		                    <td>@claim.hourlyRate </td> 
+		                    <td>@claim.totalAmount </td> 
 		                    <td>@claim.status </td> 
 	                    </tr>
 						}
@@ -97,8 +96,8 @@
                 <!-- Form Section for Adding New Claim -->
                 <form id="add-claim-form" asp-action="AddClaim" method="post">
                     <h2>Claim Info</h2>
-                    <p /><input type="number" name="HoursWorked" placeholder="Hours Worked" required min="1" />
-                    <p /><input type="number" name="HourlyRate" placeholder="Hourly Rate" required min="1" />
+                    <p /><input type="number" name="hoursWorked" placeholder="Hours Worked" required min="1" />
+                    <p /><input type="number" name="hourlyRate" placeholder="Hourly Rate" required min="1" />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
                 </form>
                 <br />
@@ -107,7 +106,7 @@
                 <form id="upload-documents-form" asp-action="UploadDocument" method="post" enctype="multipart/form-data">
 	                <h2>Supporting Documents</h2>
 	                <h3>Enter Claim ID</h3>
-                    <p /><input type="number" name="ClaimID" placeholder="Claim ID" required min="1" />
+                    <p /><input type="number" name="claimID" placeholder="Claim ID" required min="1" />
                     <p /><input type="file" name="file" required />
                     <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Upload Document</button>
                 </form>

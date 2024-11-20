@@ -23,8 +23,10 @@ namespace CMCSapp_ST10311777.Controllers
 		// Service for blob storage
 		private readonly BlobService _blobService;
 
-		// Logger service for logging errors, information, and warnings
-		private readonly ILogger<HomeController> _logger;
+        private readonly ClaimVerificationService _claimVerificationService;
+
+        // Logger service for logging errors, information, and warnings
+        private readonly ILogger<HomeController> _logger;
 
 		// Configuration service for accessing app settings
 		private readonly IConfiguration _configuration;
@@ -32,12 +34,13 @@ namespace CMCSapp_ST10311777.Controllers
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
 		// Constructor to inject services
-		public HomeController(IConfiguration configuration, BlobService blobService, ILogger<HomeController> logger)
+		public HomeController(ClaimVerificationService claimVerificationService, IConfiguration configuration, BlobService blobService, ILogger<HomeController> logger)
 		{
 			_logger = logger;
 			_blobService = blobService;
 			_configuration = configuration;
-		}
+            _claimVerificationService = claimVerificationService;
+        }
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
@@ -59,10 +62,11 @@ namespace CMCSapp_ST10311777.Controllers
 
 		// Action for LecturerPage to display claims and documents for the lecturer
 		[HttpGet]
-		public IActionResult LecturerPage()
+		public async Task<IActionResult> LecturerPage()
 		{
 			// Retrieve all claims and documents from the database
 			List<ClaimTable> claims = claimTable.GetAllClaims();
+
 			List<DocumentTable> documents = documentTable.GetAllDocuments();
 
 			// Fetch blob names from blob storage asynchronously
@@ -80,7 +84,7 @@ namespace CMCSapp_ST10311777.Controllers
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
 		// Action for CoordAndManagPage for coordinators and managers to view claims and documents
-		public IActionResult CoordAndManagPage()
+		public async Task<IActionResult> CoordAndManagPage()
 		{
 			// Retrieve all claims and documents from the database
 			List<ClaimTable> claims = claimTable.GetAllClaims();
@@ -118,25 +122,41 @@ namespace CMCSapp_ST10311777.Controllers
 		{
 			DateTime localDate = DateTime.Now;
 
-			// Ensure HoursWorked and HourlyRate are positive before proceeding
-			if (claim.HoursWorked <= 0)
-			{
-				ModelState.AddModelError(string.Empty, "Hours Worked must be greater than zero.");
-				return View("LecturerPage"); // Return to LecturerPage view with error
-			}
+            List<ClaimTable> claims = claimTable.GetAllClaims();
 
-			if (claim.HourlyRate <= 0)
-			{
-				ModelState.AddModelError(string.Empty, "Hourly Rate must be greater than zero.");
-				return View("LecturerPage"); // Return to LecturerPage view with error
-			}
+            List<DocumentTable> documents = documentTable.GetAllDocuments();
 
-			// Set the current date and status of the claim
-			claim.dateTime = localDate;
-			claim.status = "Pending";
+            // Fetch blob names from blob storage asynchronously
+            Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
 
-			// Calculate the total claim amount based on hours worked and hourly rate
-			claim.TotalAmount = claim.HourlyRate * claim.HoursWorked;
+            // Pass claims, documents, and blob names to the view using ViewData
+            ViewData["Claims"] = claims;
+            ViewData["Documents"] = documents;
+            ViewData["docNames"] = docName;
+
+            // Use the verification service to validate the claim
+            var (isValid, validationErrors) = _claimVerificationService.VerifyClaim(claim);
+
+
+            if (!isValid)
+            {
+                // Add all validation errors to ModelState
+                foreach (var error in validationErrors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
+                return View("LecturerPage");
+            }
+
+            // Set the current date and status of the claim
+            claim.claimDate = localDate;
+            //claim.status = "Pending";
+
+            // Determine the initial status using auto-approval logic
+            claim.status = _claimVerificationService.DetermineAutoApprovalStatus(claim);
+
+            // Calculate the total claim amount based on hours worked and hourly rate
+            claim.totalAmount = claim.hourlyRate * claim.hoursWorked;
 
 			// Insert the claim into the database
 			claimTable.CreateClaim(claim);
@@ -157,6 +177,7 @@ namespace CMCSapp_ST10311777.Controllers
 
 			// Check if the claim exists in the database
 			var claim = claimTable.GetClaimById(claimID);
+
 			if (claim == null)
 			{
 				// If claim doesn't exist, return the view with an error message
@@ -185,8 +206,8 @@ namespace CMCSapp_ST10311777.Controllers
 			List<ClaimTable> claims = claimTable.GetAllClaims();
 			List<DocumentTable> documents = documentTable.GetAllDocuments();
 
-			// Check if the ClaimID exists before allowing document upload
-			var claim = claimTable.GetClaimById(document.ClaimID); 
+			// Check if the claimID exists before allowing document upload
+			var claim = claimTable.GetClaimById(document.ClaimID);
 			if (claim == null)
 			{
 				// If claim doesn't exist, return the view with an error message

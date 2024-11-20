@@ -52,11 +52,11 @@
 		            @foreach (var claim in claims) // Loop through each customer profile in the model
 		            {
 			            <tr>
-				            <td>@claim.ClaimID </td> 
-				            <td>@claim.dateTime.ToString("dd/MMM/yyyy") </td>
-				            <td>@claim.HoursWorked </td> 
-				            <td>@claim.HourlyRate </td> 
-				            <td>@claim.TotalAmount </td> 
+				            <td>@claim.claimID </td> 
+				            <td>@claim.claimDate.ToString("dd/MMM/yyyy") </td>
+				            <td>@claim.hoursWorked </td> 
+				            <td>@claim.hourlyRate </td> 
+				            <td>@claim.totalAmount </td> 
 				            <td>@claim.status </td> 
 			            </tr>
 		            }
