@@ -7,7 +7,7 @@
 <!-- Header Section -->
 <header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
     <!-- Page Heading -->
-    <h1 class="w3-jumbo w3-text-red"><b>Create Claim</b></h1>
+    <h1 class="w3-jumbo w3-text-red"><b>Manage Lecturer</b></h1>
 
     <!-- Red horizontal bar  -->
     <div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
@@ -78,6 +78,27 @@
 	                <p /><input type="number" name="LecturerPhone" placeholder="Phone Number"  />
 	                <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
                 </form>
+                
+                
+                <br />
+                <div class="w3-row-padding w3-padding-64 w3-container">
+	                <div class="w3-content">
+		                <h2>Select Dates to Generate Payment Report</h2>
+		                <!-- Form to generate the report -->
+		                <form asp-action="GeneratePaymentReport" method="get" class="w3-container">
+			                <div class="w3-row">
+				                <label for="startDate" class="w3-label">Start Date</label>
+				                <input type="date" id="startDate" name="startDate" class="w3-input" required />
+			                </div>
+			                <div class="w3-row">
+				                <label for="endDate" class="w3-label">End Date</label>
+				                <input type="date" id="endDate" name="endDate" class="w3-input" required />
+			                </div>
+			                <br />
+			                <button type="submit" class="w3-button w3-black w3-padding-small w3-hover-grey">Generate Report</button>
+		                </form>
+	                </div>
+                </div>
 
             </div>
         </div>

@@ -26,6 +26,8 @@ namespace CMCSapp_ST10311777.Controllers
 
         private readonly ClaimVerificationService _claimVerificationService;
 
+        private readonly ClaimProcessingService _claimProcessingService;
+
         // Logger service for logging errors, information, and warnings
         private readonly ILogger<HomeController> _logger;
 
@@ -35,12 +37,13 @@ namespace CMCSapp_ST10311777.Controllers
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
 		// Constructor to inject services
-		public HomeController(ClaimVerificationService claimVerificationService, IConfiguration configuration, BlobService blobService, ILogger<HomeController> logger)
+		public HomeController(ClaimProcessingService claimProcessingService, ClaimVerificationService claimVerificationService, IConfiguration configuration, BlobService blobService, ILogger<HomeController> logger)
 		{
 			_logger = logger;
 			_blobService = blobService;
 			_configuration = configuration;
             _claimVerificationService = claimVerificationService;
+            _claimProcessingService = claimProcessingService;
         }
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
@@ -209,46 +212,90 @@ namespace CMCSapp_ST10311777.Controllers
 			return RedirectToAction("CoordAndManagPage");
 		}
 
-		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
-		// POST action to upload a document to blob storage and link it to a claim
-		[HttpPost]
-		public async Task<IActionResult> UploadDocument(DocumentTable document, IFormFile file)
-		{
-			DateTime localDate = DateTime.Now;
+        // POST action to upload a document to blob storage and link it to a claim
+        [HttpPost]
+        public async Task<IActionResult> UploadDocument(DocumentTable document, IFormFile file)
+        {
+            // Retrieve all claims and documents from the database
+            List<ClaimTable> claims = claimTable.GetAllClaims();
+            List<DocumentTable> documents = documentTable.GetAllDocuments();
 
-			// Retrieve all claims and documents from the database
-			List<ClaimTable> claims = claimTable.GetAllClaims();
-			List<DocumentTable> documents = documentTable.GetAllDocuments();
-
-			// Check if the claimID exists before allowing document upload
-			var claim = claimTable.GetClaimById(document.ClaimID);
-			if (claim == null)
-			{
+            // Validate input
+            if (file == null || file.Length == 0)
+            {
                 ModelState.Clear();
-                // If claim doesn't exist, return the view with an error message
+                ModelState.AddModelError(string.Empty, "Please select a file to upload.");
                 ViewData["Claims"] = claims;
-				ViewData["Documents"] = documents;
-				ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
-				return View("LecturerPage");
-			}
+                ViewData["Documents"] = documents;
+                return View("LecturerPage");
+            }
 
-			// If a file is selected, upload it to blob storage
-			if (file != null)
-			{
-				using var stream = file.OpenReadStream();
-				await _blobService.UploadBlobAsync("claim-documents", file.FileName, stream); // Upload file to blob storage
+            // Allowed file extensions
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".xlsx" };
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
-				// Save document details to the database
-				document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", file.FileName);
-				document.dateTime = localDate;
-				document.DocumentName = file.FileName;
-				documentTable.NewDocument(document);
-			}
+            // File type validation
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                ModelState.Clear();
+                ModelState.AddModelError(string.Empty, "Invalid file type. Only PDF, DOC, DOCX, and XLSX files are allowed.");
+                ViewData["Claims"] = claims;
+                ViewData["Documents"] = documents;
+                return View("LecturerPage");
+            }
 
-			// Redirect to the LecturerPage after uploading the document
-			return RedirectToAction("LecturerPage");
-		}
+            // File size validation (2 MB)
+            if (file.Length > 2 * 1024 * 1024)
+            {
+                ModelState.Clear();
+                ModelState.AddModelError(string.Empty, "File size exceeds 2 MB. Please upload a smaller file.");
+                ViewData["Claims"] = claims;
+                ViewData["Documents"] = documents;
+                return View("LecturerPage");
+            }
+
+            // Check if the claimID exists
+            var claim = claimTable.GetClaimById(document.ClaimID);
+            if (claim == null)
+            {
+                ModelState.Clear();
+                ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
+                ViewData["Claims"] = claims;
+                ViewData["Documents"] = documents;
+                return View("LecturerPage");
+            }
+
+            try
+            {
+                // Generate a unique filename to prevent overwriting
+                string uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
+
+                // Upload file to blob storage
+                using var stream = file.OpenReadStream();
+                await _blobService.UploadBlobAsync("claim-documents", uniqueFileName, stream);
+
+                // Save document details to the database
+                document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", uniqueFileName);
+                document.dateTime = DateTime.Now;
+                document.DocumentName = uniqueFileName;
+                documentTable.NewDocument(document);
+
+                // Redirect to the LecturerPage after successful upload
+                return RedirectToAction("LecturerPage");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, "Error uploading document");
+
+                ModelState.AddModelError(string.Empty, "An error occurred while uploading the document. Please try again.");
+                ViewData["Claims"] = claims;
+                ViewData["Documents"] = documents;
+                return View("LecturerPage");
+            }
+        }
 
         [HttpPost]
         public IActionResult AddLecturer(LecturerTable lecturer)
@@ -362,7 +409,23 @@ namespace CMCSapp_ST10311777.Controllers
             }
         }
 
-
+        // Generate payment report action
+        [HttpGet]
+        public IActionResult GeneratePaymentReport(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var reportBytes = _claimProcessingService.GeneratePaymentReport(startDate, endDate);
+                return File(reportBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    $"PaymentReport_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}.xlsx");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating payment report");
+                return BadRequest("Could not generate payment report");
+            }
+        }
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
