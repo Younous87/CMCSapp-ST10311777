@@ -1,7 +1,7 @@
 ﻿@model List<LecturerTable>
 @{
     var lecturers = ViewData["Lecturers"] as List<LecturerTable>;
-    ViewData["Title"] = "Manage Lecturer"; // Sets the title of the page to "Create Claim"
+    ViewData["Title"] = "Manage Lecturer"; // Sets the title of the page to "Manage Lecturer"
 }
 
 <!-- Header Section -->
@@ -31,7 +31,7 @@
         <div class="w3-content">
             <div class="w3-center">
 
-                <!-- Claim List Table Section -->
+                <!-- Lecturer List Table Section -->
                 <h2>Lecturer List</h2>
                 <table class="table">
                     <thead>
@@ -45,20 +45,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var lecturer in lecturers) // Loop through each customer profile in the model
+                        @foreach (var lecturer in lecturers) // Loop through each lecturer in the model
                         {
-                            <tr>
-                                <td>@lecturer.LecturerID </td>
-                                <td>@lecturer.LecturerFirstName </td>
-                                <td>@lecturer.LecturerLastName </td>
-                                <td>@lecturer.LecturerEmail </td>
-                                <td>@lecturer.LecturerPhone </td>
-                            </tr>
+	                        <tr>
+		                        <td>@lecturer.LecturerID </td>
+		                        <td>@lecturer.LecturerFirstName </td>
+		                        <td>@lecturer.LecturerLastName </td>
+		                        <td>@lecturer.LecturerEmail </td>
+		                        <td>@lecturer.LecturerPhone </td>
+	                        </tr>
                         }
                     </tbody>
                 </table>
                 <br />
                 
+                <!-- Form to add a new lecturer -->
                 <form id="add-lecturer-form" asp-action="AddLecturer" method="post">
 	                <h2>Lecturer Info</h2>
                     <p /><input type="text" name="LecturerFirstName" placeholder="First Name" required />
@@ -69,6 +70,7 @@
                 </form>
                 <br />
                 
+                <!-- Form to update a lecturer -->
                 <form id="add-lecturer-form" asp-action="UpdateLecturer" method="post">
 	                <h2>Update Lecturer Info</h2>
                     <p /><input type="number" name="LecturerID" placeholder="Lecturer ID" required />
