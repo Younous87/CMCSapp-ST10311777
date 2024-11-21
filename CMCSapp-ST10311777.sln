@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMCSapp-ST10311777", "CMCSapp-ST10311777.csproj", "{BB8A7C1E-7809-4F5C-A20F-75ECC2CD5502}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMCSappTests", "..\CMCSappTests\CMCSappTests.csproj", "{D724E3C3-90BA-4CD8-8F70-20AF5A0CD55C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
