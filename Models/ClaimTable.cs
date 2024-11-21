@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace CMCSapp_ST10311777.Models
 {
-    //[Table("claimTable")]
+    
     public class ClaimTable
     {
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//

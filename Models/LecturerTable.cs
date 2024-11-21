@@ -35,7 +35,7 @@ namespace CMCSapp_ST10311777.Models
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(con_string))
+                using (SqlConnection con = this.con)
                 {
                     // SQL query to insert a new lecturer into the lecturerTable
                     string sql = "INSERT INTO lecturerTable (lectFirstName, lectLastName, lectEmail, lectNumber) VALUES (@lectFirstName, @lectLastName, @lectEmail, @lectNumber)";
@@ -75,7 +75,7 @@ namespace CMCSapp_ST10311777.Models
 
             try
             {
-                using (SqlConnection con = new SqlConnection(con_string))
+                using (SqlConnection con = this.con)
                 {
                     // SQL query to select all claims from the claimTable
                     string sql = "SELECT * FROM lecturerTable";
@@ -118,7 +118,7 @@ namespace CMCSapp_ST10311777.Models
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(con_string))
+                using (SqlConnection con = this.con)
                 {
                     // Start building the SQL query dynamically
                     string sql = "UPDATE lecturerTable SET ";
