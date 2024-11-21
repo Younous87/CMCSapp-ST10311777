@@ -6,7 +6,6 @@ using System.Security.Claims;
 
 namespace CMCSapp_ST10311777.Models
 {
-    //[Table("claimTable")]
     public class ClaimTable
     {
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
@@ -78,7 +77,7 @@ namespace CMCSapp_ST10311777.Models
 			}
 		}
 
-		////°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
 		// Method to get all claims from the database
 		public List<ClaimTable> GetAllClaims()
@@ -191,7 +190,6 @@ namespace CMCSapp_ST10311777.Models
 
 			return claim; // Return the claim object or null if not found
 		}
-
 
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 	}
