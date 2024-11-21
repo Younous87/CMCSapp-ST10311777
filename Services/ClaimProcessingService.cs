@@ -5,11 +5,17 @@ namespace CMCSapp_ST10311777.Services
 {
     public class ClaimProcessingService
     {
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+        // Define private fields for the service
         private readonly ClaimTable _claimTable;
         private readonly DocumentTable _documentTable;
         private readonly ILogger<ClaimProcessingService> _logger;
         private readonly IConfiguration _configuration;
 
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+        // Constructor to inject services and configuration
         public ClaimProcessingService(
             ClaimTable claimTable,
             DocumentTable documentTable,
@@ -21,6 +27,8 @@ namespace CMCSapp_ST10311777.Services
             _logger = logger;
             _configuration = configuration;
         }
+
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
         // Generate comprehensive payment report
         public byte[] GeneratePaymentReport(DateTime startDate, DateTime endDate)
@@ -80,6 +88,9 @@ namespace CMCSapp_ST10311777.Services
             }
         }
 
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+        // Check if claims exist for a given date range
         public bool ClaimsExistForDateRange(DateTime startDate, DateTime endDate)
         {
             return _claimTable.GetAllClaims()
@@ -87,5 +98,7 @@ namespace CMCSapp_ST10311777.Services
                           (c.status == "Approved" || c.status == "Auto-Approved"));
         }
 
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
     }
-}
+}//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°...ooo000 END OF FILE 000ooo...°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
