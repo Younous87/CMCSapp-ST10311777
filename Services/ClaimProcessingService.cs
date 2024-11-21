@@ -25,11 +25,12 @@ namespace CMCSapp_ST10311777.Services
         // Generate comprehensive payment report
         public byte[] GeneratePaymentReport(DateTime startDate, DateTime endDate)
         {
-            // Retrieve approved claims within the date range
+
+            // Retrieve approved and auto-approved claims within the date range
             var approvedClaims = _claimTable.GetAllClaims()
-                .Where(c => c.status == "Approved" || c.status == "Auto-Approved" &&
-                       c.claimDate >= startDate &&
-                       c.claimDate <= endDate)
+                .Where(c => (c.status == "Approved" || c.status == "Auto-Approved") &&
+                            c.claimDate >= startDate &&
+                            c.claimDate <= endDate)
                 .ToList();
 
             // Group claims by lecturer
@@ -78,5 +79,13 @@ namespace CMCSapp_ST10311777.Services
                 }
             }
         }
+
+        public bool ClaimsExistForDateRange(DateTime startDate, DateTime endDate)
+        {
+            return _claimTable.GetAllClaims()
+                .Any(c => c.claimDate >= startDate && c.claimDate <= endDate &&
+                          (c.status == "Approved" || c.status == "Auto-Approved"));
+        }
+
     }
 }

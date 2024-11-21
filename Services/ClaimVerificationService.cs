@@ -25,9 +25,9 @@ namespace CMCSapp_ST10311777.Services
         private void LoadPolicySettings()
         {
             // Load policy settings from appsettings.json or other configuration source
-            _maxHoursPerClaim = _configuration.GetValue("ClaimPolicies:MaxHoursPerClaim", 40m);
-            _maxHourlyRate = _configuration.GetValue("ClaimPolicies:MaxHourlyRate", 100m);
-            _maxTotalClaimAmount = _configuration.GetValue("ClaimPolicies:MaxTotalClaimAmount", 5000m);
+            _maxHoursPerClaim = _configuration.GetValue("ClaimPolicies:MaxHoursPerClaim", 45m);
+            _maxHourlyRate = _configuration.GetValue("ClaimPolicies:MaxHourlyRate", 200m);
+            _maxTotalClaimAmount = _configuration.GetValue("ClaimPolicies:MaxTotalClaimAmount", 10000m);
         }
 
         public (bool IsValid, List<string> ValidationErrors) VerifyClaim(ClaimTable claim)

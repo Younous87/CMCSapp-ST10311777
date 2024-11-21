@@ -221,6 +221,7 @@ namespace CMCSapp_ST10311777.Controllers
             // Retrieve all claims and documents from the database
             List<ClaimTable> claims = claimTable.GetAllClaims();
             List<DocumentTable> documents = documentTable.GetAllDocuments();
+            DateTime localDate = DateTime.Now;
 
             // Validate input
             if (file == null || file.Length == 0)
@@ -269,18 +270,16 @@ namespace CMCSapp_ST10311777.Controllers
 
             try
             {
-                // Generate a unique filename to prevent overwriting
-                string uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
-
-                // Upload file to blob storage
                 using var stream = file.OpenReadStream();
-                await _blobService.UploadBlobAsync("claim-documents", uniqueFileName, stream);
+                await _blobService.UploadBlobAsync("claim-documents", file.FileName,
+                    stream); // Upload file to blob storage
 
                 // Save document details to the database
-                document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", uniqueFileName);
-                document.dateTime = DateTime.Now;
-                document.DocumentName = uniqueFileName;
+                document.DocumentURL = await _blobService.GetBlobUrlAsync("claim-documents", file.FileName);
+                document.dateTime = localDate;
+                document.DocumentName = file.FileName;
                 documentTable.NewDocument(document);
+                
 
                 // Redirect to the LecturerPage after successful upload
                 return RedirectToAction("LecturerPage");

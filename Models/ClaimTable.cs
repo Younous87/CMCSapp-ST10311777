@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace CMCSapp_ST10311777.Models
 {
-    
+    //[Table("claimTable")]
     public class ClaimTable
     {
 		//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
@@ -88,7 +88,7 @@ namespace CMCSapp_ST10311777.Models
 
 			try
 			{
-				using (SqlConnection con = this.con)
+				using (SqlConnection con = new SqlConnection(con_string))
 				{
 					// SQL query to select all claims from the claimTable
 					string sql = "SELECT * FROM claimTable";
@@ -134,7 +134,7 @@ namespace CMCSapp_ST10311777.Models
 		{
 			try
 			{
-				using (SqlConnection con = this.con)
+				using (SqlConnection con = new SqlConnection(con_string))
 				{
 					// SQL query to update the status of a specific claim identified by claimID
 					string sql = "UPDATE claimTable SET status = @status WHERE claimID = @claimID";
@@ -166,7 +166,7 @@ namespace CMCSapp_ST10311777.Models
 		public ClaimTable GetClaimById(int claimID)
 		{
 			ClaimTable claim = null; // Initialize claim to null
-			using (SqlConnection con = this.con) // Using statement for automatic resource management
+			using (SqlConnection con = new SqlConnection(con_string)) // Using statement for automatic resource management
 			{
 				// SQL query to select a claim by its claimID
 				string sql = "SELECT * FROM claimTable WHERE claimID = @claimID";
