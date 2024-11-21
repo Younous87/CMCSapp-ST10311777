@@ -12,6 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<BlobService>();
 // Register DatabaseService with the connection string
 builder.Services.AddSingleton<ClaimTable>();
+builder.Services.AddSingleton<LecturerTable>();
 builder.Services.AddScoped<ClaimVerificationService>();
 
 builder.Services.AddAzureClients(clientBuilder =>

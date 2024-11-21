@@ -1,0 +1,81 @@
+﻿@model List<LecturerTable>
+@{
+    var claims = ViewData["Claims"] as List<ClaimTable>;
+    var documents = ViewData["Documents"] as List<DocumentTable>;
+    var lecturers = ViewData["Lecturers"] as List<LecturerTable>;
+    ViewData["Title"] = "Create Claim"; // Sets the title of the page to "Create Claim"
+}
+
+<!-- Header Section -->
+<header class="w3-container w3-center" style="padding:120px; background-color: #ffcccc;">
+    <!-- Page Heading -->
+    <h1 class="w3-jumbo w3-text-red"><b>Create Claim</b></h1>
+
+    <!-- Red horizontal bar  -->
+    <div style="width: 20%; height: 7px; background-color: red; margin: 20px auto;" class="w3-round"></div>
+
+    <!-- Error Messages -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var state in ViewData.ModelState.Values)
+            {
+                @foreach (var error in state.Errors)
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            }
+        </div>
+    }
+
+
+    <!-- Container for the content inside the header section -->
+    <div class="w3-row-padding w3-padding-64 w3-container">
+        <div class="w3-content">
+            <div class="w3-center">
+
+                <!-- Claim List Table Section -->
+                <h2>Claim List</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <!-- Table Headers -->
+                            <th>Lecturer ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var lecturer in lecturers) // Loop through each customer profile in the model
+                        {
+                            <tr>
+                                <td>@lecturer.LecturerID </td>
+                                <td>@lecturer.LecturerFirstName </td>
+                                <td>@lecturer.LecturerLastName </td>
+                                <td>@lecturer.LecturerEmail </td>
+                                <td>@lecturer.LecturerPhone </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+
+                <!-- Form Section for Adding New Claim -->
+                <form id="add-claim-form" asp-action="AddClaim" method="post">
+                    <h2>Claim Info</h2>
+                    <p /><input type="number" name="hoursWorked" placeholder="Hours Worked" required min="1" />
+                    <p /><input type="number" name="hourlyRate" placeholder="Hourly Rate" required min="1" />
+                    <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
+                </form>
+                <br />
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Page Body Section -->
+<body style="background-color: #ffcccc;">
+</body>

@@ -19,6 +19,7 @@ namespace CMCSapp_ST10311777.Controllers
 		// Initialize claim and document tables to interact with claims and documents data
 		public ClaimTable claimTable = new();
 		public DocumentTable documentTable = new();
+		public LecturerTable lecturerTable = new();
 
 		// Service for blob storage
 		private readonly BlobService _blobService;
@@ -57,6 +58,27 @@ namespace CMCSapp_ST10311777.Controllers
 		{
 			return View();
 		}
+
+        public async Task<IActionResult> HR()
+        {
+            // Retrieve all claims and documents from the database
+            List<ClaimTable> claims = claimTable.GetAllClaims();
+
+            List<DocumentTable> documents = documentTable.GetAllDocuments();
+
+			List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
+
+            // Fetch blob names from blob storage asynchronously
+            Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
+
+            // Pass claims, documents, and blob names to the view using ViewData
+            ViewData["Claims"] = claims;
+            ViewData["Documents"] = documents;
+            ViewData["docNames"] = docName;
+			ViewData["Lecturers"] = lecturers;
+
+            return View(lecturers);
+        }
 
 		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
@@ -234,9 +256,109 @@ namespace CMCSapp_ST10311777.Controllers
 			return RedirectToAction("LecturerPage");
 		}
 
-		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+        [HttpPost]
+        public IActionResult AddLecturer(LecturerTable lecturer)
+        {
+            try
+            {
+                // Validate the lecturer object
+                if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid input. Please check the details and try again.");
+                    return View("HR"); // Return to the HR page with validation errors
+                }
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+                // Add the lecturer to the database
+                int rowsAffected = lecturerTable.NewLecturer(lecturer);
+
+                if (rowsAffected > 0)
+                {
+                    // Log success
+                    _logger.LogInformation("Lecturer added successfully: {LecturerName}", $"{lecturer.LecturerFirstName} {lecturer.LecturerLastName}");
+
+                    // Redirect to the HR page after successfully adding the lecturer
+                    return RedirectToAction("HR");
+                }
+                else
+                {
+                    // Log failure
+                    _logger.LogWarning("No rows affected while adding a lecturer: {LecturerName}", $"{lecturer.LecturerFirstName} {lecturer.LecturerLastName}");
+                    ModelState.AddModelError(string.Empty, "Failed to add the lecturer. Please try again.");
+                    return View("HR");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, "Error occurred while adding a lecturer.");
+
+                // Display an error message
+                ModelState.AddModelError(string.Empty, "An error occurred while adding the lecturer. Please try again.");
+                return View("HR");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateLecturer(LecturerTable lecturer)
+        {
+            try
+            {
+                // Validate the lecturer object
+                if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid input. Please check the details and try again.");
+                    return View("HR"); // Return to the HR page with validation errors
+                }
+
+                // Check if the lecturer exists
+                var existingLecturer = lecturerTable.GetLecturerById(lecturer.LecturerID);
+                if (existingLecturer == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Lecturer not found. Please check the ID and try again.");
+                    return View("HR");
+                }
+
+                // Update the lecturer in the database
+                int rowsAffected = lecturerTable.UpdateLecturerById(
+                    lecturer.LecturerID,
+                    lecturer.LecturerFirstName,
+                    lecturer.LecturerLastName,
+                    lecturer.LecturerEmail,
+                    lecturer.LecturerPhone
+                );
+
+                if (rowsAffected > 0)
+                {
+                    // Log success
+                    _logger.LogInformation("Lecturer updated successfully: {LecturerName}", $"{lecturer.LecturerFirstName} {lecturer.LecturerLastName}");
+
+                    // Redirect to the HR page after successfully updating the lecturer
+                    return RedirectToAction("HR");
+                }
+                else
+                {
+                    // Log failure
+                    _logger.LogWarning("No rows affected while updating lecturer ID: {LecturerId}", lecturer.LecturerID);
+                    ModelState.AddModelError(string.Empty, "Failed to update the lecturer. Please try again.");
+                    return View("HR");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, "Error occurred while updating a lecturer.");
+
+                // Display an error message
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the lecturer. Please try again.");
+                return View("HR");
+            }
+        }
+
+
+
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
