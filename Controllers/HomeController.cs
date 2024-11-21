@@ -62,19 +62,11 @@ namespace CMCSapp_ST10311777.Controllers
         public async Task<IActionResult> HR()
         {
             // Retrieve all claims and documents from the database
-            List<ClaimTable> claims = claimTable.GetAllClaims();
-
-            List<DocumentTable> documents = documentTable.GetAllDocuments();
 
 			List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
 
-            // Fetch blob names from blob storage asynchronously
-            Task<List<string>> docName = _blobService.GetBlobsAsync("claim-documents");
-
             // Pass claims, documents, and blob names to the view using ViewData
-            ViewData["Claims"] = claims;
-            ViewData["Documents"] = documents;
-            ViewData["docNames"] = docName;
+
 			ViewData["Lecturers"] = lecturers;
 
             return View(lecturers);
@@ -202,8 +194,9 @@ namespace CMCSapp_ST10311777.Controllers
 
 			if (claim == null)
 			{
-				// If claim doesn't exist, return the view with an error message
-				ViewData["Claims"] = claims;
+                ModelState.Clear();
+                // If claim doesn't exist, return the view with an error message
+                ViewData["Claims"] = claims;
 				ViewData["Documents"] = documents;
 				ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
 				return View("CoordAndManagPage");
@@ -232,8 +225,9 @@ namespace CMCSapp_ST10311777.Controllers
 			var claim = claimTable.GetClaimById(document.ClaimID);
 			if (claim == null)
 			{
-				// If claim doesn't exist, return the view with an error message
-				ViewData["Claims"] = claims;
+                ModelState.Clear();
+                // If claim doesn't exist, return the view with an error message
+                ViewData["Claims"] = claims;
 				ViewData["Documents"] = documents;
 				ModelState.AddModelError(string.Empty, "Invalid Claim ID. Please ensure the claim exists before uploading documents.");
 				return View("LecturerPage");
@@ -301,13 +295,27 @@ namespace CMCSapp_ST10311777.Controllers
         [HttpPost]
         public IActionResult UpdateLecturer(LecturerTable lecturer)
         {
+            List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
+
+            // Pass claims, documents, and blob names to the view using ViewData
+
+            ViewData["Lecturers"] = lecturers;
+
             try
             {
-                // Validate the lecturer object
-                if (!ModelState.IsValid)
+
+                // Validate that at least one field (besides ID) is provided
+                if (string.IsNullOrEmpty(lecturer.LecturerFirstName) &&
+                    string.IsNullOrEmpty(lecturer.LecturerLastName) &&
+                    string.IsNullOrEmpty(lecturer.LecturerEmail) &&
+                    string.IsNullOrEmpty(lecturer.LecturerPhone))
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid input. Please check the details and try again.");
-                    return View("HR"); // Return to the HR page with validation errors
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
+
+                    // Add a custom error message
+                    ModelState.AddModelError(string.Empty, "At least one field must be completed to update the lecturer information.");
+                    return View("HR"); // Return to HR page with error message
                 }
 
                 // Check if the lecturer exists
@@ -315,7 +323,7 @@ namespace CMCSapp_ST10311777.Controllers
                 if (existingLecturer == null)
                 {
                     ModelState.AddModelError(string.Empty, "Lecturer not found. Please check the ID and try again.");
-                    return View("HR");
+                    return View("HR", lecturers);
                 }
 
                 // Update the lecturer in the database
@@ -340,7 +348,7 @@ namespace CMCSapp_ST10311777.Controllers
                     // Log failure
                     _logger.LogWarning("No rows affected while updating lecturer ID: {LecturerId}", lecturer.LecturerID);
                     ModelState.AddModelError(string.Empty, "Failed to update the lecturer. Please try again.");
-                    return View("HR");
+                    return View("HR", lecturers);
                 }
             }
             catch (Exception ex)
@@ -350,7 +358,7 @@ namespace CMCSapp_ST10311777.Controllers
 
                 // Display an error message
                 ModelState.AddModelError(string.Empty, "An error occurred while updating the lecturer. Please try again.");
-                return View("HR");
+                return View("HR", lecturers);
             }
         }
 

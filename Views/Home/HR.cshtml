@@ -1,9 +1,7 @@
 ﻿@model List<LecturerTable>
 @{
-    var claims = ViewData["Claims"] as List<ClaimTable>;
-    var documents = ViewData["Documents"] as List<DocumentTable>;
     var lecturers = ViewData["Lecturers"] as List<LecturerTable>;
-    ViewData["Title"] = "Create Claim"; // Sets the title of the page to "Create Claim"
+    ViewData["Title"] = "Manage Lecturer"; // Sets the title of the page to "Create Claim"
 }
 
 <!-- Header Section -->
@@ -28,14 +26,13 @@
         </div>
     }
 
-
     <!-- Container for the content inside the header section -->
     <div class="w3-row-padding w3-padding-64 w3-container">
         <div class="w3-content">
             <div class="w3-center">
 
                 <!-- Claim List Table Section -->
-                <h2>Claim List</h2>
+                <h2>Lecturer List</h2>
                 <table class="table">
                     <thead>
                         <tr>
@@ -61,15 +58,26 @@
                     </tbody>
                 </table>
                 <br />
-
-                <!-- Form Section for Adding New Claim -->
-                <form id="add-claim-form" asp-action="AddClaim" method="post">
-                    <h2>Claim Info</h2>
-                    <p /><input type="number" name="hoursWorked" placeholder="Hours Worked" required min="1" />
-                    <p /><input type="number" name="hourlyRate" placeholder="Hourly Rate" required min="1" />
-                    <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
+                
+                <form id="add-lecturer-form" asp-action="AddLecturer" method="post">
+	                <h2>Lecturer Info</h2>
+                    <p /><input type="text" name="LecturerFirstName" placeholder="First Name" required />
+	                <p /><input type="text" name="LecturerLastName" placeholder="Last Name" required />
+	                <p /><input type="email" name="LecturerEmail" placeholder="Email" required />
+                    <p /><input type="number" name="LecturerPhone" placeholder="Phone Number" required />
+	                <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
                 </form>
                 <br />
+                
+                <form id="add-lecturer-form" asp-action="UpdateLecturer" method="post">
+	                <h2>Update Lecturer Info</h2>
+                    <p /><input type="number" name="LecturerID" placeholder="Lecturer ID" required />
+	                <p /><input type="text" name="LecturerFirstName" placeholder="First Name"  />
+	                <p /><input type="text" name="LecturerLastName" placeholder="Last Name"  />
+	                <p /><input type="email" name="LecturerEmail" placeholder="Email"  />
+	                <p /><input type="number" name="LecturerPhone" placeholder="Phone Number"  />
+	                <p /><button class="w3-button w3-black w3-padding-small w3-hover-grey" type="submit">Submit</button>
+                </form>
 
             </div>
         </div>
