@@ -23,9 +23,9 @@ namespace CMCSapp_ST10311777.Controllers
 
 		// Service for blob storage
 		private readonly BlobService _blobService;
-
+        // Service for claim verification
         private readonly ClaimVerificationService _claimVerificationService;
-
+        // Service for claim processing
         private readonly ClaimProcessingService _claimProcessingService;
 
         // Logger service for logging errors, information, and warnings
@@ -299,13 +299,14 @@ namespace CMCSapp_ST10311777.Controllers
             }
         }
 
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+        // POST action to add a new lecturer
         [HttpPost]
         public IActionResult AddLecturer(LecturerTable lecturer)
         {
+            // Retrieve all lecturers from the database
             List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
-
-            // Pass claims, documents, and blob names to the view using ViewData
-
             ViewData["Lecturers"] = lecturers;
 
             try
@@ -353,15 +354,17 @@ namespace CMCSapp_ST10311777.Controllers
             }
         }
 
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+        // POST action to update lecturer information
         [HttpPost]
         public IActionResult UpdateLecturer(LecturerTable lecturer)
         {
+            // Retrieve all lecturers from the database
             List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
-
-            // Pass claims, documents, and blob names to the view using ViewData
-
             ViewData["Lecturers"] = lecturers;
 
+            // Validate the lecturer object
             try
             {
 
@@ -398,6 +401,7 @@ namespace CMCSapp_ST10311777.Controllers
                     lecturer.LecturerPhone
                 );
 
+                // Check if the update was successful
                 if (rowsAffected > 0)
                 {
                     // Log success
@@ -429,14 +433,14 @@ namespace CMCSapp_ST10311777.Controllers
             }
         }
 
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
+        // Action method to generate a payment report
         [HttpGet]
         public IActionResult GeneratePaymentReport(DateTime startDate, DateTime endDate)
         {
+            // Retrieve all lecturers from the database
             List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
-
-            // Pass claims, documents, and blob names to the view using ViewData
-
             ViewData["Lecturers"] = lecturers;
             try
             {
@@ -477,7 +481,6 @@ namespace CMCSapp_ST10311777.Controllers
                 return View("HR",lecturers); // Replace with the actual view name
             }
         }
-
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
