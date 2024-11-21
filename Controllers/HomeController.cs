@@ -156,9 +156,12 @@ namespace CMCSapp_ST10311777.Controllers
 
             if (!isValid)
             {
+                ModelState.Clear();
                 // Add all validation errors to ModelState
                 foreach (var error in validationErrors)
                 {
+                    // Clear any other errors before adding the custom message
+                    
                     ModelState.AddModelError(string.Empty, error);
                 }
 
@@ -299,13 +302,21 @@ namespace CMCSapp_ST10311777.Controllers
         [HttpPost]
         public IActionResult AddLecturer(LecturerTable lecturer)
         {
+            List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
+
+            // Pass claims, documents, and blob names to the view using ViewData
+
+            ViewData["Lecturers"] = lecturers;
+
             try
             {
                 // Validate the lecturer object
                 if (!ModelState.IsValid)
                 {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
                     ModelState.AddModelError(string.Empty, "Invalid input. Please check the details and try again.");
-                    return View("HR"); // Return to the HR page with validation errors
+                    return View("HR", lecturers); // Return to the HR page with validation errors
                 }
 
                 // Add the lecturer to the database
@@ -317,18 +328,22 @@ namespace CMCSapp_ST10311777.Controllers
                     _logger.LogInformation("Lecturer added successfully: {LecturerName}", $"{lecturer.LecturerFirstName} {lecturer.LecturerLastName}");
 
                     // Redirect to the HR page after successfully adding the lecturer
-                    return RedirectToAction("HR");
+                    return RedirectToAction("HR", lecturers);
                 }
                 else
                 {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
                     // Log failure
                     _logger.LogWarning("No rows affected while adding a lecturer: {LecturerName}", $"{lecturer.LecturerFirstName} {lecturer.LecturerLastName}");
                     ModelState.AddModelError(string.Empty, "Failed to add the lecturer. Please try again.");
-                    return View("HR");
+                    return View("HR", lecturers);
                 }
             }
             catch (Exception ex)
             {
+                // Clear any other errors before adding the custom message
+                ModelState.Clear();
                 // Log the error
                 _logger.LogError(ex, "Error occurred while adding a lecturer.");
 
@@ -368,6 +383,8 @@ namespace CMCSapp_ST10311777.Controllers
                 var existingLecturer = lecturerTable.GetLecturerById(lecturer.LecturerID);
                 if (existingLecturer == null)
                 {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
                     ModelState.AddModelError(string.Empty, "Lecturer not found. Please check the ID and try again.");
                     return View("HR", lecturers);
                 }
@@ -391,6 +408,8 @@ namespace CMCSapp_ST10311777.Controllers
                 }
                 else
                 {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
                     // Log failure
                     _logger.LogWarning("No rows affected while updating lecturer ID: {LecturerId}", lecturer.LecturerID);
                     ModelState.AddModelError(string.Empty, "Failed to update the lecturer. Please try again.");
@@ -399,6 +418,8 @@ namespace CMCSapp_ST10311777.Controllers
             }
             catch (Exception ex)
             {
+                // Clear any other errors before adding the custom message
+                ModelState.Clear();
                 // Log the error
                 _logger.LogError(ex, "Error occurred while updating a lecturer.");
 
@@ -408,23 +429,55 @@ namespace CMCSapp_ST10311777.Controllers
             }
         }
 
-        // Generate payment report action
+
         [HttpGet]
         public IActionResult GeneratePaymentReport(DateTime startDate, DateTime endDate)
         {
+            List<LecturerTable> lecturers = lecturerTable.GetAllLecturers();
+
+            // Pass claims, documents, and blob names to the view using ViewData
+
+            ViewData["Lecturers"] = lecturers;
             try
             {
+                // Validate date range
+                if (startDate > endDate)
+                {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
+                    ModelState.AddModelError(string.Empty, "The start date cannot be later than the end date.");
+                    return View("HR",lecturers);
+                }
+
+                // Check if claims exist for the provided date range
+                var claimsExist = _claimProcessingService.ClaimsExistForDateRange(startDate, endDate);
+                if (!claimsExist)
+                {
+                    // Clear any other errors before adding the custom message
+                    ModelState.Clear();
+                    ModelState.AddModelError(string.Empty, "No claims are available for the specified date range.");
+                    return View("HR", lecturers);
+                }
+
+
+                // Generate the report
                 var reportBytes = _claimProcessingService.GeneratePaymentReport(startDate, endDate);
+
+                // Return the report file
                 return File(reportBytes,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     $"PaymentReport_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}.xlsx");
             }
             catch (Exception ex)
             {
+                // Clear any other errors before adding the custom message
+                ModelState.Clear();
                 _logger.LogError(ex, "Error generating payment report");
-                return BadRequest("Could not generate payment report");
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred while generating the payment report.");
+                return View("HR",lecturers); // Replace with the actual view name
             }
         }
+
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
