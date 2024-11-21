@@ -22,6 +22,7 @@ namespace CMCSapp_ST10311777.Models
         {
         }
 
+        // Define properties for the LecturerTable class
         public int LecturerID { get; set; }
         public string LecturerFirstName { get; set; }
         public string LecturerLastName { get; set; }
@@ -64,8 +65,7 @@ namespace CMCSapp_ST10311777.Models
             }
         }
 
-
-        ////°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
         // Method to get all claims from the database
         public List<LecturerTable> GetAllLecturers()
@@ -112,6 +112,8 @@ namespace CMCSapp_ST10311777.Models
 
             return claims; // Return the list of claims
         }
+
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
         // Method to update a specific lecturer's information using their ID
         public int UpdateLecturerById(int lecturerId, string firstName, string lastName, string email, string phone)
@@ -176,6 +178,9 @@ namespace CMCSapp_ST10311777.Models
             }
         }
 
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
+
+        // Method to get a lecturer by their ID
         public LecturerTable GetLecturerById(int lecturerId)
         {
             try
@@ -232,6 +237,7 @@ namespace CMCSapp_ST10311777.Models
             }
         }
 
+        //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
 
     }
-}
+}//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°...ooo000 END OF FILE 000ooo...°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°//
