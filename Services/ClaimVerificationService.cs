@@ -80,7 +80,7 @@ namespace CMCSapp_ST10311777.Services
                 else
                 {
                     _logger.LogInformation("Claim {ClaimId} requires manual review", claim.claimID);
-                    return "Pending Manual Review";
+                    return "Pending Review";
                 }
             }
             else

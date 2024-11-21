@@ -114,16 +114,16 @@ namespace CMCSapp_ST10311777.Controllers
 			return File(stream, "application/octet-stream", fileName);
 		}
 
-		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
 
-		// POST action to add a new claim 
-		[HttpPost]
-		public async Task<IActionResult> AddClaim(ClaimTable claim)
-		{
-			DateTime localDate = DateTime.Now;
+        // POST action to add a new claim 
+        [HttpPost]
+        public async Task<IActionResult> AddClaim(ClaimTable claim)
+        {
+            DateTime localDate = DateTime.Now;
 
+            // Retrieve all claims and documents
             List<ClaimTable> claims = claimTable.GetAllClaims();
-
             List<DocumentTable> documents = documentTable.GetAllDocuments();
 
             // Fetch blob names from blob storage asynchronously
@@ -137,7 +137,6 @@ namespace CMCSapp_ST10311777.Controllers
             // Use the verification service to validate the claim
             var (isValid, validationErrors) = _claimVerificationService.VerifyClaim(claim);
 
-
             if (!isValid)
             {
                 // Add all validation errors to ModelState
@@ -145,30 +144,31 @@ namespace CMCSapp_ST10311777.Controllers
                 {
                     ModelState.AddModelError(string.Empty, error);
                 }
-                return View("LecturerPage");
+
+                // Return the view with the existing model and error messages
+                return View("LecturerPage", claims);
             }
 
-            // Set the current date and status of the claim
+            // Set the current date
             claim.claimDate = localDate;
-            //claim.status = "Pending";
-
-            // Determine the initial status using auto-approval logic
-            claim.status = _claimVerificationService.DetermineAutoApprovalStatus(claim);
 
             // Calculate the total claim amount based on hours worked and hourly rate
             claim.totalAmount = claim.hourlyRate * claim.hoursWorked;
 
-			// Insert the claim into the database
-			claimTable.CreateClaim(claim);
+            // Determine the initial status using auto-approval logic AFTER validation
+            claim.status = _claimVerificationService.DetermineAutoApprovalStatus(claim);
 
-			// Redirect to the LecturerPage after adding the claim
-			return RedirectToAction("LecturerPage");
-		}
+            // Insert the claim into the database
+            claimTable.CreateClaim(claim);
 
-		//같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+            // Redirect to the LecturerPage after successfully adding the claim
+            return RedirectToAction("LecturerPage");
+        }
 
-		// POST action to update the approval status of a claim 
-		[HttpPost]
+        //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같//
+
+        // POST action to update the approval status of a claim 
+        [HttpPost]
 		public async Task<IActionResult> UpdateApprovalStatus(int claimID, string status)
 		{
 			// Retrieve all claims and documents from the database
