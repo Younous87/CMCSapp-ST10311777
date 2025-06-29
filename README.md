@@ -1,44 +1,73 @@
-# Contract Monthly Claim System (CMCS)
+# Welcome to **Contract Monthly Claim System (CMCS)**
 
-## Overview
-For the creation of the Contract Monthly Claim System (CMCS), three important points needed to be addressed:
-- The application's overall design.
-- The structure of the database.
-- The layout of the GUI.
+A modern, cloud-powered web application designed to streamline contract lecturer claim management, automate approvals, and empower HR teams with robust reporting. Built with ASP.NET Core MVC and integrated with Microsoft Azure, CMCS demonstrates best practices in scalable web development, secure document handling, and enterprise workflow automation.
 
-## Design Choices
-For the application's overall design, I decided to use the Model-View-Controller (MVC) architecture. MVC is divided into three main components:
+> **Note:**  
+> This project was developed as part of a second-year Computer Science module in Programming at The IIE Varsity College. It showcases practical skills in cloud integration, web application architecture, and modern software engineering.
 
-- **Model:** Manages interactions with the database.
-- **View:** Defines the UI and displays necessary information.
-- **Controller:** Processes user inputs and manages interactions between the model and view.
+---
 
-MVC is a good choice for CMCS because it separates concerns by dividing the application into Model, View, and Controller components. This enhances maintainability, allows for modular development, and improves scalability. It also makes it easier to manage user interfaces and business logic independently, providing a clear structure for adding features like claim submission and approval workflows.
+## 🚀 Key Features
 
-## Database Structure 
-For the database structure, a relational database was selected for the CMCS. It provides structured data organization, ensuring relationships between entities like lecturers, managers, coordinators, and claims are efficiently managed. 
+- **Role-Based Access & Security**  
+  Secure, intuitive interfaces for Lecturers, Managers, Coordinators, and HR, each with tailored permissions and workflows.
 
-### Key Benefits:
-- Supports data integrity, consistency, and scalability, making it easy to handle multiple users, track claims, and store associated data (like documents) securely.
-- Use of foreign keys and constraints ensures accurate record linkage and avoids data redundancy, which is essential for the claim submission and approval process.
+- **Seamless Claim Submission**  
+  Lecturers can submit work claims, specify hours, upload supporting documents, and track claim status in real time.
 
-## User Interface Design
-The UI for the CMCS website follows a clean, minimalistic design with a consistent color scheme of red, black, and pink. The design focuses on usability and a simple layout across all pages.
+- **Automated Verification & Approval**  
+  Built-in business rules and policy checks ensure only valid claims proceed. Claims can be auto-approved or routed for manual review based on configurable thresholds.
 
-### Key Pages:
-- **Home Page:** Users are welcomed with role selection buttons ("Lecturer" or "Manager/Coordinator"), using bold black buttons on a soft pink background.
-- **Create Claim Page:** A form allows users to enter work details and upload supporting documents, along with a summary table of existing claims.
-- **Approve Claim Page:** Users can review claim details and either approve or reject claims using a straightforward form with radio buttons.
+- **Document Management**  
+  Secure upload and retrieval of supporting documents via Azure Blob Storage, ensuring compliance and auditability.
 
-Across all pages, the red header with navigation links ensures easy access to different sections, while the color contrast ensures clarity and ease of interaction. This UI design maintains a professional and user-friendly appearance for a smooth contract claim process.
+- **Comprehensive Reporting**  
+  HR and management can generate detailed payment and claim reports, supporting financial transparency and operational insight.
 
-## Assumptions and Constraints
+- **Modern, Responsive UI**  
+  Clean, professional design with a consistent color scheme, optimized for usability and accessibility across devices.
 
-### Assumptions:
-- **User Registration:** Lecturers, coordinators, and managers are pre-registered with valid credentials.
-- **Hourly Rate:** Lecturers will manually enter their hourly rate or the system will define it during claim submission.
-- **Role Permissions:** Only authorized users (coordinators and managers) have access to verification and approval functions.
+---
 
-### Constraints:
-- **Performance Constraints:** The system must efficiently handle a growing number of users and claims without slowdowns. Scalability is key as more lecturers submit claims.
-- **Security Constraints:** Sensitive data (e.g., personal and financial information) must be protected. Only specific users should have access to specific functionality, such as managers and coordinators approving claims.
+## 🛠️ Technology Stack
+
+- **Backend:** ASP.NET Core MVC (C#)
+- **Frontend:** Razor Views, Bootstrap
+- **Database:** Microsoft SQL Server (Azure-hosted)
+- **Cloud Storage:** Azure Blob Storage
+- **Authentication:** Role-based access, session management
+- **Deployment:** Azure Web Apps
+
+---
+
+## 🌟 Why CMCS?
+
+- **Enterprise-Ready:** Follows industry standards for security, scalability, and maintainability.
+- **Cloud-Native:** Designed for the cloud, with seamless Azure integration.
+- **User-Centric:** Focused on delivering a smooth, intuitive experience for both lecturers and administrators.
+- **Extensible:** Modular architecture makes it easy to add new features or integrate with other services.
+
+---
+
+## 📦 Getting Started
+
+1. **Clone the repository**
+2. **Configure your Azure and SQL connection strings** in `appsettings.json`
+3. **Run the application**  
+   ```bash
+   dotnet run
+   ```
+4. **Access the app** at `http://localhost:5000` (or your configured port)
+
+---
+
+## 👤 Author
+
+**Younous Brayany Houssen**  
+Student ID: ST10311777
+
+---
+
+## 📄 License
+
+This project is for educational purposes.
